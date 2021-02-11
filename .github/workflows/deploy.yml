@@ -17,7 +17,7 @@ jobs:
       matrix:
         image: ['coqorg/coq:8.12-ocaml-4.07-flambda']
         # the following list must be a singleton (space-separated string)
-        src: ['']
+        src: ['test.v']
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
