@@ -30,7 +30,7 @@ jobs:
             endGroup
             startGroup 'Install serapi'
               opam update -y
-              opam install -y -v "coq-serapi>=8.12.0+0.12.0"
+              opam install -y -v -j 2 "coq-serapi>=8.12.0+0.12.0"
             endGroup
             startGroup 'Install APT/PyPI dependencies'
               sudo apt-get update -y -q
@@ -38,6 +38,7 @@ jobs:
                 python3-pip
               python3 -m pip install --user --upgrade pygments dominate beautifulsoup4 docutils
             endGroup
+            # TODO Later on: cache steps above in a Docker image
             startGroup 'Workaround permissions issue'
               sudo chown -R coq:coq .
               # the container user has UID=GID=1000,
@@ -54,7 +55,7 @@ jobs:
               for item in ${{ matrix.src }}; do
                 cp -av "src/$item" "output/$item"
                 alectryon/alectryon.py --frontend coq+rst "src/$item" \
-                  --backend webpage -o "output/$item.html"
+                  --backend webpage --output-directory output
               done
             endGroup
       - name: Revert permissions
