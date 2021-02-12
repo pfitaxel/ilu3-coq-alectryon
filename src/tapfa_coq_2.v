@@ -6,19 +6,12 @@ Types Abstraits et Programmation Fonctionnelle Avancée
 :Author: Resp. UE : Jean-Paul Bodeveix ()
 :Date:   Année universitaire 2019-2020 L3 Informatique - Semestre 6
 
-Supports Démos Coq de ce cours :
+Supports de ce cours :
 
--  https://erikmd.github.io/tryjscoq/tapfa/preuves.v (pour ProofGeneral)
-
--  https://erikmd.github.io/tryjscoq/tapfa/preuves.html
-
-Version imprimable de ces transparents : sur Moodle
-
-Preuve assistée
-===============
+-  https://pfitaxel.github.io/tapfa-coq-alectryon/
 
 Principe
---------
+========
 
 -  Prouver une propriété :math:`P` :math:`\equiv` Construire un terme de
    type :math:`P`.
@@ -29,7 +22,7 @@ Parameters (p : Prop) (q : Prop).
 
 Theorem th : p -> (p -> q) -> q.
 Proof.
-  exact (fun (x : p) (f : p -> q) => f x).
+exact (fun (x : p) (f : p -> q) => f x).
 Qed.
 (*|
 
@@ -38,18 +31,18 @@ Qed.
 .. coq::
 |*)
 Theorem th' : p -> (p -> q) -> q.
-Proof. auto. Qed.
+Proof.
+auto.
+Qed.
 
 Print th'.
-(* th' = fun (H : p) (H0 : p -> q) => H0 H
- : p -> (p -> q) -> q *)
 (*|
 
 Les principales tactiques de preuve
------------------------------------
+===================================
 
 La tactique intro (variante : intros H\ :math:`_1` … H\ :math:`_n`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------------------
 
 .. code-block:: Coq
 
@@ -75,7 +68,7 @@ quantification universelle :math:`\leadsto` introduction de l’hypothèse
 dans le contexte
 
 Preuve d’une égalité
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 .. code-block:: Coq
 
@@ -98,7 +91,7 @@ Exemple
    1 + 1 = 2
 
 Réécriture (utilisation d’une égalité)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
 Soit ``E`` : :math:`t_1=t_2` un théorème ou une hypothèse du contexte
 :math:`\Gamma`
@@ -127,11 +120,11 @@ Soit ``E`` : :math:`t_1=t_2` un théorème ou une hypothèse du contexte
    G                                     G
 
 Réécriture (cas général où le théorème ``E`` a des conditions)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------------
 
 Soit
-:math:`\mathtt{E}: \forall x_1 \ldots x_k,~p_1~x_1 \ldots x_k\rightarrow \cdots
-\rightarrow p_n~x_1\ldots x_k\rightarrow t~x_1\ldots x_k = t'~x_1\ldots
+:math:`\mathtt{E}: \forall x_1 \ldots x_k,-p_1-x_1 \ldots x_k\rightarrow \cdots
+\rightarrow p_n-x_1\ldots x_k\rightarrow t-x_1\ldots x_k = t'-x_1\ldots
 x_k`
 un théorème ou une hypothèse du contexte :math:`\Gamma`
 
@@ -154,7 +147,7 @@ un théorème ou une hypothèse du contexte :math:`\Gamma`
                                          (* n conditions requises par le théorème E *)
 
 Réécriture (exemple avec une condition)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 .. code-block:: Coq
 
@@ -173,11 +166,11 @@ Réécriture (exemple avec une condition)
                                                  O < 2 * (n + 1)
 
 La tactique apply (variante: apply H with (:math:`x_i`:=:math:`v_i`) …)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------------------------------
 
 Soit ``H`` :
-:math:`\forall x_1 \ldots x_k,~p_1~x_1\ldots x_k\rightarrow \cdots
-\rightarrow p_n~x_1\ldots x_k\rightarrow q~x_1\ldots x_k`
+:math:`\forall x_1 \ldots x_k,-p_1-x_1\ldots x_k\rightarrow \cdots
+\rightarrow p_n-x_1\ldots x_k\rightarrow q-x_1\ldots x_k`
 un théorème ou une hypothèse du contexte :math:`\Gamma`
 
 .. code-block:: Coq
@@ -193,22 +186,25 @@ un théorème ou une hypothèse du contexte :math:`\Gamma`
                                    pn u1 ... uk
 
 La tactique apply (exemple)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 .. coq::
 |*)
-Search "<=" S.
+Search concl:(_ <= _) S.
+(*|
+(`documentation de la commande Search <https://coq.github.io/doc/V8.12.2/refman/proof-engine/vernacular-commands.html#coq:cmd.search>`_)
+|*)
 
 Goal forall n, n <= S (S n).
 Proof.
 intro n.
-Check le_S.
+Check le_S.  (* réaffichons le lemme le_S, juste pour rappel *)
 apply le_S.
 Abort.
 (*|
 
 La tactique induction : applique le théorème d’induction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------
 
 .. coq::
 |*)
@@ -219,7 +215,7 @@ Abort.
 (*|
 
 La tactique destruct : preuve par cas
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------
 
 .. coq::
 |*)
@@ -229,7 +225,7 @@ destruct n.
 (*|
 
 La tactique simpl : simplification du but
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 .. coq::
 |*)
@@ -238,7 +234,7 @@ Abort.
 (*|
 
 Détail : réduction des expressions ``0+n``, ``1+n``, ``n+0``, ``n+1``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------
 
 Étant donnée que la fonction ``(fun a b : nat => a + b)`` est
 définie récursivement par rapport à son premier argument :
@@ -267,7 +263,7 @@ Autres tactiques Autres tactiques non détaillées dans ces transparents :
 
 -  ``unfold``
 
--  ``omega``, ``tauto``, ``firstorder``
+-  ``lia`` (Linear Integer Arithmetic), ``tauto``, ``firstorder``
 
 Pour plus de détails, voir l’Aide-mémoire des tactiques de preuve Coq
 
@@ -332,25 +328,28 @@ Rappel: la fonction ``(fun l1 l2 => l1 ++ l2)`` est définie comme suit :
      | x1 :: l1 => x1 :: app l1 l2
      end.
 
-[Explication au tableau]
+Sauriez vous l'écrire en OCaml ?
 
 Premier lemme – preuve par induction
 ------------------------------------
+
+À la main : ... TODO
+
+En Coq :
 
 .. coq::
 |*)
 Lemma app_nil : forall (T : Type) (l : list T), l = l ++ [].
 Proof.
 induction l.
-{ simpl.
+{ (* accolades conseillées pour délimiter les preuves du sous but *)
+  simpl.
   reflexivity. }
 simpl.
 rewrite <- IHl. (* utilise l’hypothèse d’induction *)
 reflexivity.
 Qed.
 (*|
-
-[Démo]
 
 Pour appliquer ``simpl`` à chaque sous-but généré il suffit d’écrire
 la tactique une fois après ";"
