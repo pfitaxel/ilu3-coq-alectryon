@@ -333,7 +333,19 @@ Sauriez vous l'écrire en OCaml ?
 Premier lemme – preuve par induction
 ------------------------------------
 
-À la main : ... TODO
+À la main :
+
+Prouvons le lemme ``app_nil`` par induction structurelle sur la liste
+``l``.
+
+- Si ``l`` est la liste vide ``[]``, on a bien ``[] = [] ++ []``
+  en simplifiant la définition de ``app``.
+
+- Sinon, ``l`` est de la forme ``x :: l'``. En supposant que ``l' = l' ++ []``
+  (appelons cette hypothèse d'induction ``IHl``), montrons que
+  ``x :: l' = (x :: l') ++ []``. En simplifiant la définition de ``app``
+  on doit donc prouver que ``x :: l' = x :: (l' ++ [])``, soit en appliquant
+  ``IHl``, que ``x :: l' = x :: l'``.
 
 En Coq :
 
