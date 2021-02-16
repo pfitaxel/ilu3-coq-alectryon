@@ -32,7 +32,7 @@ Module Type Monoide.
   Parameter prod : T -> T -> T. (* une opération *)
 
   Axiom assoc :
-    forall x y z:T, prod x (prod y z) = prod (prod x y) z.
+    forall x y z : T, prod x (prod y z) = prod (prod x y) z.
   Axiom neutre_g : forall x, prod un x = x.
   Axiom neutre_d : forall x, prod x un = x.
 End Monoide.
@@ -71,7 +71,7 @@ Module MonoList <: Monoide. (* vérification sans masquage *)
   Definition prod (x y : T) := x ++ y.
 
   Lemma assoc :
-    forall x y z:T, prod x (prod y z) = prod (prod x y) z.
+    forall x y z : T, prod x (prod y z) = prod (prod x y) z.
   Proof. apply app_assoc. Qed.
 
   Lemma neutre_g : forall x, prod un x = x.
@@ -132,22 +132,22 @@ option :
 Inductive option {T : Type} := None | Some (valeur : T).
 
 Module Type Pile.
-  Parameter Elem: Type.
-  Parameter P: Type.
-  Parameter vide: P.
-  Parameter push: Elem -> P -> P.
-  Parameter estVide: P -> bool.
-  Parameter top: P -> @option Elem.
-  Parameter pop: P -> P.
+  Parameter Elem : Type.
+  Parameter P : Type.
+  Parameter vide : P.
+  Parameter push : Elem -> P -> P.
+  Parameter estVide : P -> bool.
+  Parameter top : P -> @option Elem.
+  Parameter pop : P -> P.
   (* et pas "P -> option P" :
    * choix de conception pour simplifier les preuves *)
 
-  Axiom estVide_vide: estVide vide = true.
-  Axiom estVide_push: forall p e, estVide (push e p) = false.
-  Axiom top_vide: top vide = None.
-  Axiom top_push: forall p e, top (push e p) = Some e.
-  Axiom pop_vide: pop vide = vide.
-  Axiom pop_push: forall p e, pop (push e p) = p.
+  Axiom estVide_vide : estVide vide = true.
+  Axiom estVide_push : forall p e, estVide (push e p) = false.
+  Axiom top_vide : top vide = None.
+  Axiom top_push : forall p e, top (push e p) = Some e.
+  Axiom pop_vide : pop vide = vide.
+  Axiom pop_push : forall p e, pop (push e p) = p.
 End Pile.
 (*|
 
@@ -163,12 +163,12 @@ Module Pile_Liste <: Pile.
   Definition Elem := nat.
   Definition P := list nat.
   Definition vide : P := [].
-  Definition push (e: Elem) (p: P) := e :: p.
-  Definition estVide (p: P) :=
+  Definition push (e : Elem) (p : P) := e :: p.
+  Definition estVide (p : P) :=
     match p with [] => true | _ => false end.
-  Definition top (p: P) :=
+  Definition top (p : P) :=
     match p with [] => None | x :: _ => Some x end.
-  Definition pop (p: P) :=
+  Definition pop (p : P) :=
     match p with [] => [] | _ :: l => l end.
 
   Lemma estVide_vide : estVide vide = true.
@@ -203,11 +203,12 @@ Module Pile_QListe <: Pile.
   Definition Elem := nat.
   Definition P := list nat.
   Definition vide : P := [].
-  Definition push (e: Elem) (p: P) := p ++ [e].
-  Definition estVide (p: P) := match p with [] => true | _ => false end.
-  Fixpoint top (p: P) :=
+  Definition push (e : Elem) (p : P) := p ++ [e].
+  Definition estVide (p : P) :=
+    match p with [] => true | _ => false end.
+  Fixpoint top (p : P) :=
     match p with [] => None | [e] => Some e | x:: l => top l end.
-  Fixpoint pop (p: P) :=
+  Fixpoint pop (p : P) :=
     match p with [] => [] | [e] => [] | x :: l => x :: pop l end.
 
   Lemma estVide_vide : estVide vide = true.
