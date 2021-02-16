@@ -419,4 +419,4 @@ Le théorème visé
 Theorem rev_involutive : forall T (l : list T), rev (rev l) = l.
 Proof.
 (* TODO *)
-Qed.
+(* Qed. *)
