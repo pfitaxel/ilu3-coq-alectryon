@@ -4,7 +4,7 @@ Types Abstraits et Programmation Fonctionnelle Avancée
 ======================================================
 
 :Author: Resp. UE : Jean-Paul Bodeveix ()
-:Date:   Année universitaire 2019-2020 L3 Informatique - Semestre 6
+:Date:   Année universitaire 2020-2021 L3 Informatique - Semestre 6
 
 Supports de ce cours :
 
