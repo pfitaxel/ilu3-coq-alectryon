@@ -3,8 +3,8 @@
 Types Abstraits et Programmation Fonctionnelle Avancée
 ======================================================
 
-:Author: Resp. UE : Jean-Paul Bodeveix ()
-:Date:   Année universitaire 2019-2020 L3 Informatique - Semestre 6
+:Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
+:Date:    L3 Info, Semestre 6, Année 2020-2021
 
 Modules en Coq et application aux TAD
 =====================================
