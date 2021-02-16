@@ -418,8 +418,5 @@ Le théorème visé
 |*)
 Theorem rev_involutive : forall T (l : list T), rev (rev l) = l.
 Proof.
-induction l; simpl; auto.
-rewrite rev_app_distr.
-rewrite IHl.
-reflexivity.
+(* TODO *)
 Qed.
