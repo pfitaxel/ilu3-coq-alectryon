@@ -1,19 +1,10 @@
-===================================
-Types Abstraits et
-Programmation Fonctionnelle Avancée
-===================================
+(*|
+======================================================
+Types Abstraits et Programmation Fonctionnelle Avancée
+======================================================
 
 :Author: Resp. UE : Jean-Paul Bodeveix ()
-:Date:   Année universitaire 2019-2020
-L3 Informatique - Semestre 6
-
-.. raw:: latex
-
-   \shorthandoff{:;!?}
-
-.. raw:: latex
-
-   \titleframe
+:Date:   Année universitaire 2019-2020 L3 Informatique - Semestre 6
 
 Modules en Coq et application aux TAD
 =====================================
@@ -21,7 +12,9 @@ Modules en Coq et application aux TAD
 1. Spécification de modules (types de modules)
 ----------------------------------------------
 
-Déclaration d’identificateurs. On distingue
+Déclaration d’identificateurs.
+
+On distingue :
 
 -  des identificateurs de types
 
@@ -31,25 +24,26 @@ Déclaration d’identificateurs. On distingue
 
 Exemple
 
-::
+.. coq::
+|*)
+Module Type Monoide.
+  Parameter T : Type.           (* une sorte *)
+  Parameter un : T.             (* une constante *)
+  Parameter prod : T -> T -> T. (* une opération *)
 
-   {-Module Type-} Monoide.
-     Parameter T : Type.           (* une sorte *)
-     Parameter un : T.             (* une constante *)
-     Parameter prod : T -> T -> T. (* une opération *)
-
-     Axiom assoc :
-       forall x y z:T, prod x (prod y z) = prod (prod x y) z.
-     Axiom neutre_g : forall x, prod un x = x.
-     Axiom neutre_d : forall x, prod x un = x.
-   End Monoide.
+  Axiom assoc :
+    forall x y z:T, prod x (prod y z) = prod (prod x y) z.
+  Axiom neutre_g : forall x, prod un x = x.
+  Axiom neutre_d : forall x, prod x un = x.
+End Monoide.
+(*|
 
 2. Modules réalisant une spécification
 --------------------------------------
 
 Définition des identificateurs déclarés dans la spécification
 
-Implantations possibles du monoide
+Implantations possibles du monoide :
 
 -  entiers avec :math:`0` et :math:`+`
 
@@ -61,63 +55,65 @@ Implantations possibles du monoide
 
 -  …
 
-.. _modules-réalisant-une-spécification-1:
-
 2. Modules réalisant une spécification
 --------------------------------------
 
-Exemple : monoide des listes avec concaténation
+Exemple : monoide des listes avec concaténation
 
-::
+.. coq::
+|*)
+Require Import List. Import ListNotations.
+Set Implicit Arguments.
 
-   Require Import List. Import ListNotations.
-   {-Set Implicit Arguments-}.
+Module MonoList <: Monoide. (* vérification sans masquage *)
+  Definition T := list nat.
+  Definition un : T := [].
+  Definition prod (x y : T) := x ++ y.
 
-   Module MonoList <: Monoide. (* vérification sans masquage *)
-     Definition T := list nat.
-     Definition un : T := [].
-     Definition prod (x y : T) := x ++ y.
-     Lemma |*assoc*| :
-       forall x y z:T, prod x (prod y z) = prod (prod x y) z.
-     Proof. apply app_assoc. Qed.
-     Lemma |*neutre_g*| : forall x, prod un x = x.
-     Proof. reflexivity. Qed.
-     Lemma |*neutre_d*| : forall x, prod x un = x.
-     Proof. induction x; auto. simpl. rewrite IHx. reflexivity. Qed.
-   End MonoList.
+  Lemma assoc :
+    forall x y z:T, prod x (prod y z) = prod (prod x y) z.
+  Proof. apply app_assoc. Qed.
+
+  Lemma neutre_g : forall x, prod un x = x.
+  Proof. reflexivity. Qed.
+
+  Lemma neutre_d : forall x, prod x un = x.
+  Proof. induction x; auto. simpl. rewrite IHx. reflexivity. Qed.
+End MonoList.
+(*|
 
 3. Utilisation indépendante de l’implantation (foncteur)
 --------------------------------------------------------
 
-Exemple: unicité de l’élément neutre
+Exemple : unicité de l’élément neutre
 
-::
-
-   Module Use(M : Monoide).
-     Theorem |*unicite*| : forall u : M.T, (forall x, M.prod x u = x) -> u = M.un.
-     Proof.
-     intros u Hu.
-     rewrite <-(Hu M.un).
-     rewrite M.neutre_g.
-     reflexivity.
-     Qed.
-   End Use.
+.. coq::
+|*)
+Module Use(M : Monoide).
+  Theorem unicite :
+    forall u : M.T, (forall x, M.prod x u = x) -> u = M.un.
+  Proof.
+  intros u Hu.
+  rewrite <-(Hu M.un).
+  rewrite M.neutre_g.
+  reflexivity.
+  Qed.
+End Use.
+(*|
 
 4. Instantiation du foncteur (a.k.a. module paramétré)
 ------------------------------------------------------
 
 Exemple
 
-::
+.. coq::
+|*)
+Module Inst := Use(MonoList).
+  Check Inst.unicite.
 
-   Module Inst := Use(MonoList).
-   Check Inst.unicite.
-   (* : forall u : MonoList.T, (forall x : MonoList.T, MonoList.prod x u = x) -> u = MonoList.un *)
-
-   Print MonoList.un.
-   (* MonoList.un = [] : MonoList.T *)
-   Print MonoList.T.
-   (* MonoList.T = list nat : Set *)
+  Print MonoList.un.
+  Print MonoList.T.
+(*|
 
 Exemple autour de la structure de pile
 ======================================
@@ -129,73 +125,110 @@ Ecrire la spécification du type abstrait tPile introduisant un type
 Elem, un type P, et les opérations habituelles sur les piles. On
 essaiera d’étendre au maximum le domaine des fonctions partielles (par
 ex. en retournant la pile vide), ou si besoin en utilisant le type
-option :
+option :
 
-Inductive option (T : Type) := None \| Some (valeur : T).
+.. coq::
+|*)
+Inductive option {T : Type} := None | Some (valeur : T).
 
--Module Type- Pile. Parameter Elem: Type. Parameter P: Type. Parameter
-vide: P. Parameter push: Elem -> P -> P. Parameter estVide: P -> bool.
-Parameter top: P -> option Elem. Parameter pop: P -> P. (\* et pas "P ->
-option P" : choix de conception pour simplifier les preuves \*)
+Module Type Pile.
+  Parameter Elem: Type.
+  Parameter P: Type.
+  Parameter vide: P.
+  Parameter push: Elem -> P -> P.
+  Parameter estVide: P -> bool.
+  Parameter top: P -> @option Elem.
+  Parameter pop: P -> P.
+  (* et pas "P -> option P" :
+   * choix de conception pour simplifier les preuves *)
 
-.. raw:: latex
-
-   \decrementframenumber
-
-Signature d’un TAD Pile
-
-... Axiom estVide_vide: estVide vide = true. Axiom estVide_push: forall
-p e, estVide (push e p) = false. Axiom top_vide: top vide = None. Axiom
-top_push: forall p e, top (push e p) = Some e. Axiom pop_vide: pop vide
-= vide. Axiom pop_push: forall p e, pop (push e p) = p. End Pile.
-
-Implémentation du TAD Pile Implémentez un TAD Pile d’entiers naturels,
-en vous appuyant sur la bibliothèque des listes.
-
-Module Pile_Liste <: Pile. Definition Elem := nat. Definition P := list
-nat. Definition vide : P := []. Definition push (e: Elem) (p: P) := e ::
-p. Definition estVide (p: P) := match p with [] => true \| \_ => false
-end. Definition top (p: P) := match p with [] => None \| x :: \_ => Some
-x end. Definition pop (p: P) := match p with [] => [] \| \_ :: l => l
-end. ...
-
-.. raw:: latex
-
-   \decrementframenumber
+  Axiom estVide_vide: estVide vide = true.
+  Axiom estVide_push: forall p e, estVide (push e p) = false.
+  Axiom top_vide: top vide = None.
+  Axiom top_push: forall p e, top (push e p) = Some e.
+  Axiom pop_vide: pop vide = vide.
+  Axiom pop_push: forall p e, pop (push e p) = p.
+End Pile.
+(*|
 
 Implémentation du TAD Pile
+--------------------------
 
-... Lemma \|*estVide_vide*|: estVide vide = true. Proof. reflexivity.
-Qed. Lemma \|*estVide_push*|: forall p e, estVide (push e p) = false.
-Proof. intros p e. reflexivity. Qed. Lemma \|*top_vide*|: top vide =
-None. Proof. reflexivity. Qed. Lemma \|*top_push*|: forall p e, top
-(push e p) = Some e. Proof. intros p e. reflexivity. Qed. Lemma
-\|*pop_vide*|: pop vide = vide. Proof. reflexivity. Qed. Lemma
-\|*pop_push*|: forall p e, pop (push e p) = p. Proof. intros p e.
-reflexivity. Qed. End Pile_Liste.
+Implémentez un TAD Pile d’entiers naturels,
+en vous appuyant sur la bibliothèque des listes.
 
-Autre exemple d’implémentation Peut-on implémenter le même TAD avec des
-listes, mais en empilant et dépilant en queue ?
+.. coq::
+|*)
+Module Pile_Liste <: Pile.
+  Definition Elem := nat.
+  Definition P := list nat.
+  Definition vide : P := [].
+  Definition push (e: Elem) (p: P) := e :: p.
+  Definition estVide (p: P) :=
+    match p with [] => true | _ => false end.
+  Definition top (p: P) :=
+    match p with [] => None | x :: _ => Some x end.
+  Definition pop (p: P) :=
+    match p with [] => [] | _ :: l => l end.
 
-Module Pile_QListe <: Pile. Definition Elem := nat. Definition P := list
-nat. Definition vide : P := []. Definition push (e: Elem) (p: P) := p ++
-[e]. Definition estVide (p: P) := match p with [] => true \| \_ => false
-end. Fixpoint top (p: P) := match p with [] => None \| [e] => Some e \|
-x:: l => top l end. Fixpoint pop (p: P) := match p with [] => [] \| [e]
-=> [] \| x :: l => x :: pop l end.
+  Lemma estVide_vide : estVide vide = true.
+  Proof. reflexivity. Qed.
 
-.. raw:: latex
+  Lemma estVide_push : forall p e, estVide (push e p) = false.
+  Proof. intros p e. reflexivity. Qed.
 
-   \decrementframenumber
+  Lemma top_vide : top vide = None.
+  Proof. reflexivity. Qed.
+
+  Lemma top_push : forall p e, top (push e p) = Some e.
+  Proof. intros p e. reflexivity. Qed.
+
+  Lemma pop_vide : pop vide = vide.
+  Proof. reflexivity. Qed.
+
+  Lemma pop_push : forall p e, pop (push e p) = p.
+  Proof. intros p e. reflexivity. Qed.
+End Pile_Liste.
+(*|
 
 Autre exemple d’implémentation
+------------------------------
 
-... Lemma \|*estVide_vide*|: estVide vide = true. Proof. reflexivity.
-Qed. Lemma \|*estVide_push*|: forall p e, estVide (push e p) = false.
-Proof. induction p; simpl; auto. Qed. Lemma \|*top_vide*|: top vide =
-None. Proof. reflexivity. Qed. Lemma \|*top_push*|: forall p e, top
-(push e p) = Some e. Proof. induction p; auto; destruct p; auto. Qed.
-Lemma \|*pop_vide*|: pop vide = vide. Proof. reflexivity. Qed. Lemma
-\|*pop_push*|: forall p e, pop (push e p) = p. Proof. induction p; auto;
-destruct p; auto. intros e; rewrite <-(IHp e) at 2; auto. Qed. End
-Pile_QListe.
+Peut-on implémenter le même TAD avec des
+listes, mais en empilant et dépilant en queue ?
+
+.. coq::
+|*)
+Module Pile_QListe <: Pile.
+  Definition Elem := nat.
+  Definition P := list nat.
+  Definition vide : P := [].
+  Definition push (e: Elem) (p: P) := p ++ [e].
+  Definition estVide (p: P) := match p with [] => true | _ => false end.
+  Fixpoint top (p: P) :=
+    match p with [] => None | [e] => Some e | x:: l => top l end.
+  Fixpoint pop (p: P) :=
+    match p with [] => [] | [e] => [] | x :: l => x :: pop l end.
+
+  Lemma estVide_vide : estVide vide = true.
+  Proof. reflexivity. Qed.
+
+  Lemma estVide_push : forall p e, estVide (push e p) = false.
+  Proof. induction p; simpl; auto. Qed.
+
+  Lemma top_vide : top vide = None.
+  Proof. reflexivity. Qed.
+
+  Lemma top_push : forall p e, top (push e p) = Some e.
+  Proof. induction p; auto; destruct p; auto. Qed.
+
+  Lemma pop_vide : pop vide = vide.
+  Proof. reflexivity. Qed.
+
+  Lemma pop_push : forall p e, pop (push e p) = p.
+  Proof.
+  induction p; auto.
+  destruct p; auto.
+  intros e; rewrite <-(IHp e) at 2; auto.
+  Qed.
+End Pile_QListe.
