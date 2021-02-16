@@ -61,7 +61,7 @@ La tactique intro (variante : intros H\ :math:`_1` … H\ :math:`_n`)
    ∀ x : t, P x                    =========
                                    P x
 
-Cas d’utilisation de ``intro``
+Cas d’utilisation de `intro`
 
 Lorsque le but est une implication ou une
 quantification universelle :math:`\leadsto` introduction de l’hypothèse
@@ -76,7 +76,7 @@ Preuve d’une égalité
    ======
    t = t'
 
-Cas d’utilisation de ``reflexivity``
+Cas d’utilisation de `reflexivity`
 
 Lorsque le but est une égalité
 entre 2 termes identiques (modulo calcul) :math:`\leadsto` fin de la
@@ -233,17 +233,17 @@ simpl.
 Abort.
 (*|
 
-Détail : réduction des expressions ``0+n``, ``1+n``, ``n+0``, ``n+1``
----------------------------------------------------------------------
+Détail : réduction des expressions `0+n`, `1+n`, `n+0`, `n+1`
+-------------------------------------------------------------
 
-Étant donnée que la fonction ``(fun a b : nat => a + b)`` est
+Étant donnée que la fonction `(fun a b : nat => a + b)` est
 définie récursivement par rapport à son premier argument :
 
--  ``0 + n`` se réduit par calcul à ``n``
+-  `0 + n` se réduit par calcul à `n`
 
--  ``1 + n`` se réduit par calcul à ``S n``
+-  `1 + n` se réduit par calcul à `S n`
 
--  :math:`\leadsto` donc on peut prouver trivialement ``1 + n = S n`` (par réflexivité)
+-  :math:`\leadsto` donc on peut prouver trivialement `1 + n = S n` (par réflexivité)
 
 -  mais **on a besoin d’une preuve par induction** pour montrer que
 
@@ -254,16 +254,16 @@ définie récursivement par rapport à son premier argument :
 
 Autres tactiques Autres tactiques non détaillées dans ces transparents :
 
--  ``exact``
+-  `exact`
 
--  ``symmetry``, ``transitivity``
+-  `symmetry`, `transitivity`
 
--  ``constructor``, ``split``, ``left``, ``right``, ``exists``,
-   ``discriminate``, ``injection``
+-  `constructor`, `split`, `left`, `right`, `exists`,
+   `discriminate`, `injection`
 
--  ``unfold``
+-  `unfold`
 
--  ``lia`` (Linear Integer Arithmetic), ``tauto``, ``firstorder``
+-  `lia` (Linear Integer Arithmetic), `tauto`, `firstorder`
 
 Pour plus de détails, voir l’Aide-mémoire des tactiques de preuve Coq
 
@@ -294,7 +294,7 @@ inchangée :
 
    ∀ T (l : list T), rev (rev l) = l
 
-La fonction ``List.rev`` est définie comme suit :
+La fonction `List.rev` est définie comme suit :
 
 .. code-block:: Coq
 
@@ -304,7 +304,7 @@ La fonction ``List.rev`` est définie comme suit :
      | x :: l’ => rev l’ ++ [x]
      end.
 
-où ``++`` est une notation Coq qui équivaut à ``@`` en OCaml.
+où `++` est une notation Coq qui équivaut à ``@`` en OCaml.
 
 **Méthode** On part du théorème à prouver et on identifie au fur et à
 mesure les lemmes intermédiaires qui méritent d’être prouvés à part.
@@ -312,13 +312,13 @@ mesure les lemmes intermédiaires qui méritent d’être prouvés à part.
 Premier lemme
 -------------
 
-Prouver (par induction sur la liste ``l1``) que l’on a :
+Prouver (par induction sur la liste `l1`) que l’on a :
 
 .. code-block:: Coq
 
    Lemma app_nil : forall (T : Type) (l : list T), l = l ++ [].
 
-Rappel: la fonction ``(fun l1 l2 => l1 ++ l2)`` est définie comme suit :
+Rappel: la fonction `(fun l1 l2 => l1 ++ l2)` est définie comme suit :
 
 .. code-block:: Coq
 
@@ -335,17 +335,16 @@ Premier lemme – preuve par induction
 
 À la main :
 
-Prouvons le lemme ``app_nil`` par induction structurelle sur la liste
-``l``.
+Prouvons le lemme `app_nil` par induction structurelle sur la liste `l`.
 
-- Si ``l`` est la liste vide ``[]``, on a bien ``[] = [] ++ []``
-  en simplifiant la définition de ``app``.
+- Si `l` est la liste vide `[]`, on a bien `[] = [] ++ []`
+  en simplifiant la définition de `app`.
 
-- Sinon, ``l`` est de la forme ``x :: l'``. En supposant que ``l' = l' ++ []``
-  (appelons cette hypothèse d'induction ``IHl``), montrons que
-  ``x :: l' = (x :: l') ++ []``. En simplifiant la définition de ``app``
-  on doit donc prouver que ``x :: l' = x :: (l' ++ [])``, soit en appliquant
-  ``IHl``, que ``x :: l' = x :: l'``.
+- Sinon, `l` est de la forme `x :: l'`. En supposant que `l' = l' ++ []`
+  (appelons cette hypothèse d'induction `IHl`), montrons que
+  `x :: l' = (x :: l') ++ []`. En simplifiant la définition de `app`
+  on doit donc prouver que `x :: l' = x :: (l' ++ [])`, soit en appliquant
+  `IHl`, que `x :: l' = x :: l'`.
 
 En Coq :
 
@@ -363,7 +362,7 @@ reflexivity.
 Qed.
 (*|
 
-Pour appliquer ``simpl`` à chaque sous-but généré il suffit d’écrire
+Pour appliquer `simpl` à chaque sous-but généré il suffit d’écrire
 la tactique une fois après ";"
 
 .. coq::
@@ -391,7 +390,7 @@ reflexivity.
 Qed.
 (*|
 
-``auto`` essaie d’appliquer récursivement les hypothèses
+`auto` essaie d’appliquer récursivement les hypothèses
 (et certains lemmes standard, comme la réflexivité)
 pour prouver le sous-but ; sinon la tactique ne fait rien.
 
