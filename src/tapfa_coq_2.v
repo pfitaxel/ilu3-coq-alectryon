@@ -165,8 +165,8 @@ Réécriture (exemple avec une condition)
                                                  ===============
                                                  O < 2 * (n + 1)
 
-La tactique apply (variante: apply H with (:math:`x_i`:=:math:`v_i`) …)
------------------------------------------------------------------------
+La tactique `apply` (variante : `apply H with (x_i:=v_i`) …)
+------------------------------------------------------------
 
 Soit ``H`` :
 :math:`\forall x_1 \ldots x_k,-p_1-x_1\ldots x_k\rightarrow \cdots
