@@ -52,6 +52,9 @@ Présentation du logiciel Coq
 
    `Coq'Art: Interactive Theorem Proving and Program Development
    <http://www.labri.fr/perso/casteran/CoqArt/coqartF.pdf>`_
+
+TODO Fiat-Crypto
+
 |*)
 
 (*|
@@ -145,6 +148,8 @@ Definition Mod3 := {x : nat | x < 3}.
 (*|
 -  Synthèse de fonctions à partir d’une preuve de sa spécification :
 |*)
+
+(* TODO Replace with list example *)
 
 Definition pred :
   forall n : nat, (* précond *) n > 0 ->
@@ -253,6 +258,8 @@ Exemples d’expressions Coq et leur type
 Exemples en Coq
 ---------------
 |*)
+
+(* TODO unfold *)
 
 Check 0. (* 0 : nat *)
 Check true. (* true : bool *)
