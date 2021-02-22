@@ -66,7 +66,9 @@ Cas d’utilisation de `intro`
 Lorsque le but est une implication ou une
 quantification universelle :math:`\leadsto` introduction de l’hypothèse
 dans le contexte
+|*)
 
+(*|
 Preuve d’une égalité
 --------------------
 
@@ -89,7 +91,9 @@ Exemple
    Γ          --> reflexivity -->   ∅ (Qed)
    =========
    1 + 1 = 2
+|*)
 
+(*|
 Réécriture (utilisation d’une égalité)
 --------------------------------------
 
@@ -118,7 +122,9 @@ Soit ``E`` : :math:`t_1=t_2` un théorème ou une hypothèse du contexte
    H : P t2   --> rewrite <-E in H -->   H : P t1
    ========                              ========
    G                                     G
+|*)
 
+(*|
 Réécriture (cas général où le théorème ``E`` a des conditions)
 --------------------------------------------------------------
 
@@ -145,7 +151,9 @@ un théorème ou une hypothèse du contexte :math:`\Gamma`
                                          pn u1 ... uk
 
                                          (* n conditions requises par le théorème E *)
+|*)
 
+(*|
 Réécriture (exemple avec une condition)
 ---------------------------------------
 
@@ -164,7 +172,9 @@ Réécriture (exemple avec une condition)
                                                  n : nat
                                                  ===============
                                                  O < 2 * (n + 1)
+|*)
 
+(*|
 La tactique `apply` (variante : `apply H with (x_i:=v_i`) …)
 ------------------------------------------------------------
 
@@ -184,7 +194,9 @@ un théorème ou une hypothèse du contexte :math:`\Gamma`
                                    Γ
                                    ============
                                    pn u1 ... uk
+|*)
 
+(*|
 La tactique apply (exemple)
 ---------------------------
 
@@ -266,7 +278,9 @@ Autres tactiques Autres tactiques non détaillées dans ces transparents :
 -  `lia` (Linear Integer Arithmetic), `tauto`, `firstorder`
 
 Pour plus de détails, voir l’Aide-mémoire des tactiques de preuve Coq
+|*)
 
+(*|
 Exemples et exercices autour des listes
 =======================================
 
@@ -308,7 +322,9 @@ où `++` est une notation Coq qui équivaut à ``@`` en OCaml.
 
 **Méthode** On part du théorème à prouver et on identifie au fur et à
 mesure les lemmes intermédiaires qui méritent d’être prouvés à part.
+|*)
 
+(*|
 Premier lemme
 -------------
 
@@ -329,7 +345,9 @@ Rappel: la fonction `(fun l1 l2 => l1 ++ l2)` est définie comme suit :
      end.
 
 Sauriez vous l'écrire en OCaml ?
+|*)
 
+(*|
 Premier lemme – preuve par induction
 ------------------------------------
 
