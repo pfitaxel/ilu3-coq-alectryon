@@ -109,10 +109,10 @@ Exemple
 .. coq::
 |*)
 Module Inst := Use(MonoList).
-  Check Inst.unicite.
+  Check Inst.unicite.  (* .unfold *)
 
-  Print MonoList.un.
-  Print MonoList.T.
+  Print MonoList.un.  (* .unfold *)
+  Print MonoList.T.  (* .unfold *)
 (*|
 
 Exemple autour de la structure de pile

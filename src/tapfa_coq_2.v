@@ -36,6 +36,7 @@ auto.
 Qed.
 
 Print th'.
+(* .unfold *)
 (*|
 
 Les principales tactiques de preuve
@@ -203,6 +204,7 @@ La tactique apply (exemple)
 .. coq::
 |*)
 Search concl:(_ <= _) S.
+(* .unfold *)
 (*|
 (`documentation de la commande Search <https://coq.github.io/doc/V8.12.2/refman/proof-engine/vernacular-commands.html#coq:cmd.search>`_)
 |*)
@@ -435,5 +437,5 @@ Le théorème visé
 |*)
 Theorem rev_involutive : forall T (l : list T), rev (rev l) = l.
 Proof.
-(* TODO *)
+(* exercice ! *)
 (* Qed. *)
