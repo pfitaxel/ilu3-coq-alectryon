@@ -404,15 +404,15 @@ Une fonction générique prend un type en paramètre.
 Exemple de définition d'une fonction générique : la fonction identité.
 |*)
 
-Definition id := fun (T:Type) => fun (x:T) => x.
+Definition id := fun (T : Type) => fun (x : T) => x.
 (* ou *)
-Definition id_v2 := fun (T:Type) (x:T) => x.
+Definition id_v2 := fun (T : Type) (x : T) => x.
 (* ou *)
-Definition id_v3 (T:Type) := fun (x:T) => x.
+Definition id_v3 (T : Type) := fun (x : T) => x.
 (* ou *)
-Definition id_v4 (T:Type) (x:T) := x.
+Definition id_v4 (T : Type) (x : T) := x.
 (* ou *)
-Definition id_v5 T (x:T) := x.
+Definition id_v5 T (x : T) := x.
 
 (*| :math:`\leadsto` ces fonctions ont toutes 2 arguments ! *)
 
@@ -438,11 +438,11 @@ Généricité et typage
 
 Type d’une fonction générique
 
--  En OCaml : ``id: 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
+-  En OCaml : ``id : 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
    id prend un argument de type ``'a`` et retourne un résultat de
    type ``'a``
 
--  En Coq : `id: forall a, a -> a` :math:`\leadsto` la quantification
+-  En Coq : `id : forall a, a -> a` :math:`\leadsto` la quantification
    est explicite
 
 -  extension du langage des termes :
@@ -481,7 +481,7 @@ Redéfinissons la fonction id après activation des arguments implicites
 
 Set Implicit Arguments. (* au début du fichier en principe *)
 
-Definition id' (T:Type) (x:T) := x.
+Definition id' (T : Type) (x : T) := x.
 Print id'.
 (* .unfold *)
 
@@ -551,9 +551,9 @@ déclarer ces paramètres de généricité lors de la définition.
 
 (* Set Implicit Arguments. (* déjà fait auparavant *) *)
 
-Definition comp T1 T2 T3 (f:T1->T2) (g:T2->T3) (x:T1): T3 := g (f x).
+Definition comp T1 T2 T3 (f:T1->T2) (g:T2->T3) (x : T1) : T3 := g (f x).
 (* ou *)
-Definition comp_v2 T1 T2 T3 (f:T1->T2) (g:T2->T3) (x:T1) := g (f x).
+Definition comp_v2 T1 T2 T3 (f:T1->T2) (g:T2->T3) (x : T1) := g (f x).
 (* ou *)
 Definition comp_v3 T1 T2 T3 (f:T1->T2) (g:T2->T3) x := g (f x).
 (* ou *)
@@ -573,7 +573,7 @@ Exercices
 Definition mult2 := (* todo *)0.
 
 (*|
-2. | **Supposons défini** le prédicat `leq: nat -> nat -> bool`,
+2. | **Supposons défini** le prédicat `leq : nat -> nat -> bool`,
      retournant `true` si son 1er argument est inférieur à son second.
    | Définir la fonction ``max`` retournant le plus grand de ses 2 arguments.
    | En déduire la fonction ``max3`` retournant le plus grand de ses 3 arguments.
@@ -976,7 +976,7 @@ La correspondance de Curry–Howard : double lecture
 | `forall n, n+1 > n`| fonction associant à chaque    | quantification         |
 |                    | entier une preuve              | universelle            |
 +--------------------+--------------------------------+------------------------+
-| `forall x:X, P x`  | fonction dont le type          | ∀x∈X, P x              | 
+| `forall x : X, P x`| fonction dont le type          | ∀x∈X, P x              |
 |                    | d'arrivée dépend de l'argument |                        |
 +--------------------+--------------------------------+------------------------+
 
@@ -998,8 +998,8 @@ La Conjonction
 
 .. code-block:: Coq
 
-   Inductive and (P Q: Prop): Prop :=
-     Conj (p: P) (q: Q).
+   Inductive and (P Q : Prop) : Prop :=
+     Conj (p : P) (q : Q).
 
    -->
 
