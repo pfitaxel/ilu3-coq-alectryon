@@ -6,6 +6,10 @@ Aperçu des fonctionnalités de Coq
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
 :Date:    L3 Info, Semestre 6, Année 2020-2021
 
+Supports de ce cours :
+
+-  https://pfitaxel.github.io/tapfa-coq-alectryon/
+
 Aperçu des fonctionnalités de Coq
 =================================
 
@@ -48,13 +52,17 @@ Présentation du logiciel Coq
    -  | Vérification de systèmes critiques (voir par exemple :
       | `<https://github.com/ligurio/practical-fm>`_)
 
+   -  `FiatCrypto <https://github.com/mit-plv/fiat-crypto>`_ :
+      "Simple High-Level Code For Cryptographic Arithmetic: With
+      Proofs, Without Compromises" (*Implementations from our library
+      were included in BoringSSL to replace existing specialized code,
+      for inclusion in several large deployments for Chrome, Android,
+      and CloudFlare.*)
+
 -  Ouvrage (publié chez Springer et téléchargeable en français) :
 
    `Coq'Art: Interactive Theorem Proving and Program Development
    <http://www.labri.fr/perso/casteran/CoqArt/coqartF.pdf>`_
-
-TODO Fiat-Crypto
-
 |*)
 
 (*|
@@ -93,11 +101,12 @@ Rappel : installation de l’environnement de TP
 Environnement recommandé
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Coq 8.12 + Emacs + ProofGeneral + Company-Coq [cf. tutoriel ci-dessous]
+-  Coq 8.12 + Emacs + ProofGeneral + Company-Coq
+   [cf. `tutoriel <https://github.com/erikmd/tapfa-init.el>`_]
 
 -  Carte de référence / raccourcis clavier [cf. Moodle]
 
--  Dictionnaire OCaml/Coq [cf. Moodle]
+-  Dictionnaire OCaml/Coq [cf. Moodle ; autorisé à l'examen a priori]
 
 Tutoriel d’installation
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -106,8 +115,9 @@ Tutoriel d’installation
 
   `<https://github.com/erikmd/tapfa-init.el>`_
 
--  *n’hésitez pas à poser des questions sur Moodle/Discord ;
-   on vous demandera un feedback au dernier TP.*
+-  à installer avant le 1er TP TAPFA-Coq
+
+-  n’hésitez pas à poser des questions sur Moodle/Discord
 |*)
 
 (*|
@@ -238,40 +248,69 @@ Introduction à Coq
 Types et expressions
 --------------------
 
-| À retenir En Coq, tout terme bien formé a un type (y compris les types !)
+| À retenir :
+| En Coq, tout terme bien formé a un type (y compris les types !)
 | donc contrairement à OCaml, les termes/expressions et les types ne
   forment pas deux "collections disjointes"
 
 Exemples d’expressions Coq et leur type
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
-+------------------+-------------+--------------+-------------+
-| valeur/programme | type        | type de type | …           |
-+==================+=============+==============+=============+
-| 0                | nat         | Set          | …           |
-+------------------+-------------+--------------+-------------+
-| true             | bool        | Set          | …           |
-+------------------+-------------+--------------+-------------+
-| fun x => x + 1   | nat -> nat  | Set          | …           |
-+------------------+-------------+--------------+-------------+
-
-Exemples en Coq
----------------
++------------------+--------------+--------------+-------------+
+| valeur/programme | type         | type de type | …           |
++==================+==============+==============+=============+
+| `0`              | `nat`        | Set          | …           |
++------------------+--------------+--------------+-------------+
+| `true`           | `bool`       | Set          | …           |
++------------------+--------------+--------------+-------------+
+| `fun x => x + 1` | `nat -> nat` | Set          | …           |
++------------------+--------------+--------------+-------------+
 |*)
 
-(* TODO unfold *)
-
-Check 0. (* 0 : nat *)
-Check true. (* true : bool *)
-Check fun x => x + 1. (* fun x => x + 1 : nat -> nat *)
-Check nat. (* nat : Set *)
-Check Set. (* Set : Type *)
+Check 0.
+(* .unfold *)
+Check true.
+(* .unfold *)
+Check fun x => x + 1.
+(* .unfold *)
+Check nat.
+(* .unfold *)
+Check Set.
+(* .unfold *)
 
 (*|
-Exemples avancés d’expressions Coq et leur type.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exemples avancés d’expressions Coq et leur type
+-----------------------------------------------
 
-Remarque :
++--------------------+------------------+--------------+-------------+
+| valeur/programme   | type             | type de type | …           |
++====================+==================+==============+=============+
+| `list`             | `Type -> Type`   | `Type`       | …           |
++--------------------+------------------+--------------+-------------+
+| "preuve de `2<=2`" | `2 <= 2`         | `Prop`       | …           |
++--------------------+------------------+--------------+-------------+
+| "(1;               | `{x: nat | x>0}` | `Set`        | …           |
+|  preuve de `1>0`)" |                  |              |             |
++--------------------+------------------+--------------+-------------+
+|*)
+
+Check 2 <= 2.
+(* .unfold *)
+Check le 2 2.
+(* .unfold *)
+Check le_n 2.
+(* .unfold *)
+Check le_n.
+(* .unfold *)
+Check le.
+(* .unfold *)
+(* Prop est le type des formules logiques *)
+Check Prop.
+(* .unfold *)
+
+(*|
+Remarques
+---------
 
 -  `Prop` est le type des formules logiques ;
 
@@ -286,15 +325,243 @@ Les deux ont leur utilité :
 -  les prédicats renvoyant un `Prop` correspondent à des "prédicats logiques"
    (définis par une formule) :
    on peut prouver leur véracité par un *raisonnement*.
-
-+-------------------+----------------+--------------+-------------+
-| valeur/programme  | type           | type de type | …           |
-+===================+================+==============+=============+
-| list              | Type -> Type   | Type         | …           |
-+-------------------+----------------+--------------+-------------+
-| "preuve de `1<2`" | 1 < 2          | Prop         | …           |
-+-------------------+----------------+--------------+-------------+
-| "(1,              | {x: nat | x>0} | Set          | …           |
-| preuve de `1>0`)" |                |              |             |
-+-------------------+----------------+--------------+-------------+
 |*)
+
+(*|
+Le type des listes : comparaison OCaml / Coq
+--------------------------------------------
+
++-----------------------------+------------------------------------------+
+| OCaml                       | Coq                                      |
++=============================+==========================================+
+| `'a list`                   | `list a`                                 |
++-----------------------------+------------------------------------------+
+| `bool list`                 | `list bool`                              |
++-----------------------------+------------------------------------------+
+| notation spéciale postfixée | `list` est une fonction : `Type -> Type` |
++-----------------------------+------------------------------------------+
+|*)
+
+Check list.
+(* .unfold *)
+
+(*|
+Éléments de syntaxe
+-------------------
+
+-  Les mots "terme" et "expression" sont synonymes.
+
+- | Rappel :
+  | En Coq, tout terme bien formé a un type (y compris les types !) ;
+  | contrairement à OCaml, les termes/expressions et les types ne
+    forment pas deux "collections disjointes" ;
+  | donc la grammaire des termes ci-dessous contient aussi Type, Set, Prop :
+
+.. code-block:: Coq
+
+   terme ::= Type | Set | Prop           "sortes" (= types de type)
+           | var                         "variable"
+           | ( terme )
+           | terme terme                 "application"
+           | terme op terme              "opérateur infixe"
+           | fun var : terme ⇒ terme     "abstraction"
+           | let var := terme in terme   "définition locale"
+           | if terme then terme else terme
+           | terme -> terme              "type flèche" (= type des fonctions)
+
+|*)
+
+(*|
+Exemples
+--------
+|*)
+
+Check fun x => x + 1.
+
+Check (fun f x => f (f x)) (fun x => x + 1).
+
+Eval compute in (fun f x => f (f x)) (fun x => x + 1) 3.
+
+Definition f1 := fun x => x + 1. Eval compute in f 0.
+
+Definition double f := fun (x : nat) => f (f x). Check double.
+
+Definition double2 (f : nat -> nat) := fun x => f (f x). Check double2.
+
+Fail Definition double3 f := fun x => f (f x).
+
+(*|
+Cette dernière définition est refusée car en Coq, les *paramètres de
+généricité* sont explicites. Pas de synthèse automatique de leur nom ;
+il faut expliciter ces arguments.
+|*)
+
+(*|
+Généricité
+----------
+
+Une fonction générique prend un type en paramètre.
+
+Exemple de définition d'une fonction générique : la fonction identité.
+|*)
+
+Definition id := fun (T:Type) => fun (x:T) => x.
+(* ou *)
+Definition id_v2 := fun (T:Type) (x:T) => x.
+(* ou *)
+Definition id_v3 (T:Type) := fun (x:T) => x.
+(* ou *)
+Definition id_v4 (T:Type) (x:T) := x.
+(* ou *)
+Definition id_v5 T (x:T) := x.
+
+(*| :math:`\leadsto` ces fonctions ont toutes 2 arguments ! *)
+
+(*|
+Utilisation d’une fonction générique
+|*)
+
+Check id nat.
+(* .unfold *)
+Check id nat 0.
+(* .unfold *)
+Check id bool.
+(* .unfold *)
+Check id bool true.
+(* .unfold *)
+
+Print id.
+(* .unfold *)
+
+(*|
+Généricité et typage
+--------------------
+
+Type d’une fonction générique
+
+-  En OCaml: ``id: 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
+   id prend un argument de type ``'a`` et retourne un résultat de
+   type `'a`
+
+-  En Coq: `id: forall a, a -> a`` :math:`\leadsto` la quantification
+   est explicite
+
+-  extension du langage des termes :
+
+.. code-block:: Coq
+
+   terme ::= Type | Set | Prop
+           | var
+           | ( terme )
+           | terme terme
+           | terme op terme
+           | fun var : terme ⇒ terme
+           | let var := terme in terme
+           | if terme then terme else terme
+           | terme -> terme             (type d'une fonction)
+           | forall var : terme, terme  (type d'une fonction générique)
+
+- | Comme on le verra par la suite, `t1 -> t2` est en fait
+  | une syntaxe alternative (plus intuitive) pour "`forall _ : t1, t2`".
+|*)
+
+Check id.
+(* .unfold *)
+
+(*|
+Généricité et arguments implicites I
+------------------------------------
+
+Les remarques qui suivent ne sont pas "exigibles à l'examen" mais
+permettront d'avoir plus de confort, notamment en TP, en évitant de
+devoir expliciter tous les paramètres de généricité lors de l'appel
+d'une fonction polymorphe.
+
+Redéfinissons la fonction id après activation des arguments implicites
+|*)
+
+Set Implicit Arguments. (* au début du fichier en principe *)
+
+Definition id' (T:Type) (x:T) := x.
+Print id'.
+(* .unfold *)
+
+(* même code que *)
+Print id.
+(* .unfold *)
+
+(* mais *)
+About id'.
+(* id' : forall [T : Type], T -> T *)
+
+(*|
+l'argument T est implicite : il peut être inféré à partir de l'argument d'après.
+
+D'où une syntaxe concise à la OCaml :
+|*)
+
+Check id' 0.
+(* .unfold *)
+
+Set Printing All. (* affiche tout, dont les arguments implicites *)
+Check id' 0.
+(* .unfold *)
+
+Unset Printing All.
+
+(*|
+Généricité et arguments implicites II
+-------------------------------------
+
+En OCaml :
+
+``let id x = x;;``
+
+``id 0;; (* : int = 0 *)``
+
+``id true;; (* : bool = true *)``
+
+En Coq :
+
+`Set Implicit Arguments.`
+
+`Definition id T (x:T) := x.`
+
+`Check id 0. (* id 0 : nat *)`
+
+`Check id true. (* id true : bool *)`
+|*)
+
+(*|
+Paramètres de généricité : un plus gros exemple
+-----------------------------------------------
+
+En OCaml :
+
+``let comp f g x = g (f x);;``
+
+``val comp : (’a -> ’b) -> (’b -> ’c) -> ’a -> ’c = <fun>``
+
+``comp (fun x -> x + 1) (fun x -> x * 2) 3;;``
+
+:math:`\leadsto` ?
+
+En Coq :
+
+Pas de synthèse du nom des paramètres de généricité : il faut
+déclarer ces paramètres de généricité lors de la définition.
+|*)
+
+(* Set Implicit Arguments. (* déjà fait auparavant *) *)
+
+Definition comp T1 T2 T3 (f:T1->T2) (g:T2->T3) (x:T1): T3 := g (f x).
+(* ou *)
+Definition comp_v2 T1 T2 T3 (f:T1->T2) (g:T2->T3) (x:T1) := g (f x).
+(* ou *)
+Definition comp_v3 T1 T2 T3 (f:T1->T2) (g:T2->T3) x := g (f x).
+(* ou *)
+Definition comp_v4 T1 T2 T3 f (g:T2->T3) (x:T1) := g (f x).
+(* ou *)
+Definition comp_v5 T1 T2 T3 (f:T1->T2) g (x:T1) : T3 := g (f x).
+
+Eval compute in comp (fun x => x + 1) (fun x => x * 2) 3.
