@@ -381,7 +381,7 @@ Check (fun f x => f (f x)) (fun x => x + 1).
 
 Eval compute in (fun f x => f (f x)) (fun x => x + 1) 3.
 
-Definition f1 := fun x => x + 1. Eval compute in f 0.
+Definition f1 := fun x => x + 1. Eval compute in f1 0.
 
 Definition double f := fun (x : nat) => f (f x). Check double.
 
@@ -493,7 +493,7 @@ Print id.
 About id'.
 (* id' : forall [T : Type], T -> T *)
 (*|
-(:math:`\leadsto`: noter le [T] au lieu de T)
+(:math:`\leadsto` noter le [T] au lieu de T)
 
 L'argument T est implicite : il peut être inféré à partir de l'argument d'après.
 
