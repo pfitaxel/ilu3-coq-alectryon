@@ -468,6 +468,26 @@ Check id.
 (* .unfold *)
 
 (*|
+Inférence d'arguments
+---------------------
+
+Dans le terme `id bool true` ci dessus, Coq pourrait deviner
+automatiquement le premier argument `bool` puisque c'est le type
+du deuxième argument `true` d'après le type de `id`. Il est
+effectivement possible d'écrire
+|*)
+Check id _ true.
+(* .unfold *)
+(*|
+Coq remplace automatiquement le `_` par la seule valeur possible `bool`.
+
+On peut ainsi remplacer tout sous terme par un trou `_` et laisser Coq
+tenter de le remplir. Coq retourne une erreur quand il ne trouve pas
+de solution canonique.
+|*)
+Fail Definition id_bool := id bool _.
+
+(*|
 Généricité et arguments implicites I
 ------------------------------------
 
@@ -476,6 +496,7 @@ permettront d'avoir plus de confort, notamment en TP, en évitant de
 devoir expliciter tous les paramètres de généricité lors de l'appel
 d'une fonction polymorphe.
 
+Les arguments implicites permettent d'écrire `id true` au lieu de `id _ true`.
 Redéfinissons la fonction id après activation des arguments implicites
 |*)
 
@@ -500,13 +521,18 @@ L'argument T est implicite : il peut être inféré à partir de l'argument d'ap
 D'où une syntaxe concise à la OCaml :
 |*)
 
-Check id' 0.
+Check id' true.
 (* .unfold *)
 
 Set Printing All. (* affiche tout, dont les arguments implicites *)
-Check id' 0.
+Check id' true.
 (* .unfold *)
-
+(*|
+Le `@` indique que tous les arguments de `id'` sont explicités.
+Grâce aux arguments implicites, entrer `id' true` est equivalent à entrer
+|*)
+Check @id' _ true.
+(* .unfold *)
 Unset Printing All.
 
 (*|
