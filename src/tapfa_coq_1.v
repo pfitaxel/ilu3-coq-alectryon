@@ -159,8 +159,6 @@ Definition Mod3 := {x : nat | x < 3}.
 -  Synthèse de fonctions à partir d’une preuve de sa spécification :
 |*)
 
-(* TODO Replace with list example *)
-
 Definition pred :
   forall n : nat, (* précond *) n > 0 ->
     {m : nat | (* postcond *) S m = n}.
@@ -282,16 +280,15 @@ Check Set.
 Exemples avancés d’expressions Coq et leur type
 -----------------------------------------------
 
-+--------------------+------------------+--------------+-------------+
-| valeur/programme   | type             | type de type | …           |
-+====================+==================+==============+=============+
-| `list`             | `Type -> Type`   | `Type`       | …           |
-+--------------------+------------------+--------------+-------------+
-| "preuve de `2<=2`" | `2 <= 2`         | `Prop`       | …           |
-+--------------------+------------------+--------------+-------------+
-| "(1;               | `{x: nat | x>0}` | `Set`        | …           |
-|  preuve de `1>0`)" |                  |              |             |
-+--------------------+------------------+--------------+-------------+
++------------------------+------------------+--------------+-------------+
+| valeur/programme       | type             | type de type | …           |
++========================+==================+==============+=============+
+| `list`                 | `Type -> Type`   | `Type`       | …           |
++------------------------+------------------+--------------+-------------+
+| "preuve de `2<=2`"     | `2 <= 2`         | `Prop`       | …           |
++------------------------+------------------+--------------+-------------+
+| "(1; preuve de `1>0`)" | `{x: nat | x>0}` | `Set`        | …           |
++------------------------+------------------+--------------+-------------+
 |*)
 
 Check 2 <= 2.
@@ -331,15 +328,15 @@ Les deux ont leur utilité :
 Le type des listes : comparaison OCaml / Coq
 --------------------------------------------
 
-+-----------------------------+------------------------------------------+
-| OCaml                       | Coq                                      |
-+=============================+==========================================+
-| `'a list`                   | `list a`                                 |
-+-----------------------------+------------------------------------------+
-| `bool list`                 | `list bool`                              |
-+-----------------------------+------------------------------------------+
-| notation spéciale postfixée | `list` est une fonction : `Type -> Type` |
-+-----------------------------+------------------------------------------+
++-----------------------------------+------------------------------------------+
+| OCaml                             | Coq                                      |
++===================================+==========================================+
+| `'a list`                         | `list a`                                 |
++-----------------------------------+------------------------------------------+
+| `bool list`                       | `list bool`                              |
++-----------------------------------+------------------------------------------+
+| notation spéciale, mais familière | `list` est une fonction : `Type -> Type` |
++-----------------------------------+------------------------------------------+
 |*)
 
 Check list.
@@ -374,6 +371,8 @@ Check list.
 (*|
 Exemples
 --------
+
+Que renvoient les commandes suivantes ?
 |*)
 
 Check fun x => x + 1.
@@ -439,11 +438,11 @@ Généricité et typage
 
 Type d’une fonction générique
 
--  En OCaml: ``id: 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
+-  En OCaml : ``id: 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
    id prend un argument de type ``'a`` et retourne un résultat de
    type ``'a``
 
--  En Coq: `id: forall a, a -> a` :math:`\leadsto` la quantification
+-  En Coq : `id: forall a, a -> a` :math:`\leadsto` la quantification
    est explicite
 
 -  extension du langage des termes :
@@ -705,4 +704,365 @@ La correspondance de Curry–Howard : double lecture
 +---------------+------------------------------------+------------------------+
 |               | f transforme une "preuve" de `P` en une "preuve" de `Q`     |
 +---------------+-------------------------------------------------------------+
+|*)
+
+(*|
+Types inductifs
+---------------
+
+Définition d’un type inductif paramétré par ``a1,...,am``.
+
+En OCaml :
+
+.. code-block:: OCaml
+
+   type ('a1, ..., 'am) t =     (* m paramètres de généricité *)
+     | C1 of t1_1 * ... * t1_n1 (* constructeur C1 d'arité n1 *)
+     | ...
+     | Ck of tk_1 * ... * tk_nk (* kième constructeur *)
+
+En Coq :
+
+.. code-block:: Coq
+
+   Inductive t a1 ... am :=
+     | C1 (p1 : t1_1) ... (pn1 : t1_n1)
+     | ...
+     | Ck (p1 : tk_1) ... (pnk : tk_nk). (* ne pas oublier le point *)
+|*)
+
+(*|
+Analyse par cas
+---------------
+
+En OCaml :
+
+.. code-block:: OCaml
+
+   match x with
+   | C1 (x1, ..., xn1) -> ...
+   | ...
+   | Ck (x1, ..., xnk) -> ...
+
+En Coq :
+
+.. code-block:: Coq
+
+   match x with
+   | C1 x1 ... xn1 => ...
+   | ...
+   | Ck x1 ... xnk => ...
+   end
+
+Différences :
+
+-  Les constructeurs sont typiquement "curryfiées" en Coq.
+
+-  Les ``->`` sont remplacées par `=>`
+
+-  Il y a un ``end`` en plus (pratique)
+
+-  Sinon c'est la même syntaxe :-)
+|*)
+
+(*|
+Exemples de types inductifs
+---------------------------
+
+Type de données prédéfini dans Coq :
+|*)
+Print bool.
+(* .unfold *)
+
+Inductive entier_nat := Zero | Succ (p : entier_nat).
+Inductive liste T := Vide | Cons (x : T) (l : liste T).
+
+(*|
+Eléments d’un type inductif :
+|*)
+
+Check true.
+(* .unfold *)
+
+Check (Succ (Succ Zero)).
+(* .unfold *)
+
+Definition liste1 := @Cons entier_nat (Succ Zero) (Vide entier_nat).
+Print liste1.
+(* .unfold *)
+
+(*|
+Fonctions récursives
+--------------------
+
+| **Obligation de terminaison :**
+| un des arguments doit être *structurellement décroissant*
+| (appels récursifs sur un sous-terme de cet argument)
+
+| Comme déjà dit en introduction :
+| il est impossible de définir en Coq une fonction récursive qui ne termine pas.
+|*)
+
+Fixpoint add n m :=
+  match n with
+  | Zero => m
+  | Succ p => Succ (add p m)
+  end.
+
+Fixpoint long T (l : liste T) :=
+  match l with
+  | Vide _ => Zero
+  | Cons x r => Succ (long r)
+  end.
+
+(*| 
+Est-ce normal d'écrire `Cons x r => Succ (long r)` ?
+
+Précisons :
+
+- Le constructeur `Cons` a trois arguments,
+
+- La fonction `long` a 2 arguments...
+
+- Mais on avait activé les arguments implicites : `Set Implicit Arguments`.
+
+- On pourrait néanmoins écrire en étant pleinement explicite :
+|*)
+
+Fixpoint long_v2 T (l : liste T) :=
+  match l with
+  | Vide _ => Zero
+  | @Cons _ x r => Succ (@long_v2 T r)
+  end.
+
+Eval compute in long_v2 liste1.
+
+(*|
+Schémas inductifs
+-----------------
+
+Preuve par récurence sur les entiers naturels (construits avec Zero, Succ)
+
+Est-ce que la fonction suivante (ou son type) vous rappellent quelque chose ?
+
+.. code-block:: Coq
+
+   Fixpoint entier_nat_ind (P : entier_nat -> Prop)
+   (fZero : P Zero) (fSucc : forall n : entier_nat, P n -> P (Succ n))
+   (n : entier_nat) : P n :=
+     match n with
+     | Zero => fZero
+     | Succ n => fSucc n (entier_nat_ind P fZero fSucc n)
+     end.
+|*)
+
+Check entier_nat_ind.
+(* .unfold *)
+
+(*|
+Il s'agit du "Principe d’induction" pour les entiers naturels, généré
+automatiquement par Coq.
+
+(Et il se trouve que le "code" qui implémente ce principe correspond à
+l'itérateur le plus général sur le type `entier_nat` :)
+
+Le type en question est donc :
+
+.. code-block:: Coq
+
+   forall P : entier_nat -> Prop, P Zero ->
+     (forall n : entier_nat, P n -> P (Succ n))
+   -> forall n : entier_nat, P n.
+|*)
+
+(*|
+Un peu d’intuition sur ce principe d’induction
+----------------------------------------------
+
+-  Hypothèses :
+
+   -  pZero : preuve de P Zero
+   -  pSucc : preuve de :math:`\forall n,\ P n \implies P (n+1)`
+
+-  Conclusion :
+
+   -  :math:`\forall n,\ P n`
+
+On peut l'écrire sous la forme d'une "Règle d'inférence" :
+
+.. code-block:: Coq
+
+   (pZero : P Zero)  (pSucc : forall n : entier_nat, P n -> P (Succ n))
+   --------------------------------------------------------------------
+        entier_nat_ind P pZero pSucc :  forall n : entier_nat, P n
+|*)
+
+(*|
+L'effet domino
+--------------
+
+Une petite image vaut mieux qu'un long discours :
+
+.. image:: https://upload.wikimedia.org/wikipedia/commons/9/92/Dominoeffect.png
+   :alt: CC BY-SA 3.0
+   :target: https://commons.wikimedia.org/wiki/File:Dominoeffect.png
+|*)
+
+(*|
+Le type inductif des listes (prédéfini)
+---------------------------------------
+|*)
+
+Require Import List.
+Import ListNotations.
+(* Set Implicit Arguments. (* déjà fait auparavant *) *)
+
+Check list.
+(* .unfold *)
+
+Print list.
+(* .unfold *)
+
+(*|
+.. code-block:: Coq
+
+   Fixpoint list_ind T (P : list T -> Prop)
+   (pNil : P nil) (pCons : forall x l, P l -> P (x :: l)) l
+   : P l :=
+     match l with
+     | [] => pNil
+     | x :: r => pCons x r (@list_ind T P pNil pCons r)
+     end.
+
+Généré automatiquement !
+
+Permet la "preuve par induction" sur les listes (construites avec `[]` et `::`)
+|*)
+
+(*|
+Règle d'inférence du schéma inductif des listes
+-----------------------------------------------
+
+.. code-block:: Coq
+
+   (pNil : P [])  (pCons : forall x l, P l -> P (x :: l))
+   ------------------------------------------------------
+           list_ind P pNil pCons :  forall l, P l
+
+Ici, on a omis les types implicites (le param. de généricité T) par simplicité.
+|*)
+
+(*|
+
+Correspondance entre les types et les formules logiques
+-------------------------------------------------------
+
+La correspondance de Curry–Howard : double lecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++--------------------+--------------------------------+------------------------+
+| Notation           | Lecture fonctionnelle          | Lecture logique        |
++====================+================================+========================+
+| `x : T`            | `x` a pour type `T`            | `x` "preuve" de `T`    |
++--------------------+--------------------------------+------------------------+
+| *aucun* `x:T`      | le type `T` est vide           | `T` est insatisfiable  |
++--------------------+--------------------------------+------------------------+
+| `P -> Q`           | type des fonctions de P dans Q | l'implication logique  |
++--------------------+--------------------------------+------------------------+
+| `f : P -> Q`       | f est une fonction de P dans Q | f preuve de ``P => Q`` |
++--------------------+--------------------------------+------------------------+
+|                    | f transforme une "preuve" de P en une "preuve" de Q     |
++--------------------+--------------------------------+------------------------+
+| `forall T, T -> T` | type générique de l'identité   | exemple de tautologie  |
++--------------------+--------------------------------+------------------------+
+| `forall n, n+1 > n`| fonction associant à chaque    | quantification         |
+|                    | entier une preuve              | universelle            |
++--------------------+--------------------------------+------------------------+
+| `forall x:X, P x`  | fonction dont le type          | ∀x∈X, P x              | 
+|                    | d'arrivée dépend de l'argument |                        |
++--------------------+--------------------------------+------------------------+
+
+| Remarque :
+| en Coq et contrairement à la "théorie des ensembles",
+| toutes les variables quantifiées sont associées à un type (qui peut
+  cependant être inféré :)
+|*)
+
+Check forall n, n + 1 > n.
+(* .unfold *)
+
+(*|
+Exemple de types inductifs : propositions logiques
+--------------------------------------------------
+
+La Conjonction
+~~~~~~~~~~~~~~
+
+.. code-block:: Coq
+
+   Inductive and (P Q: Prop): Prop :=
+     Conj (p: P) (q: Q).
+
+   -->
+
+     (p : P)  (q : Q)
+   --------------------
+    Conj p q :  P /\ Q
+
+La Disjonction
+~~~~~~~~~~~~~~
+
+.. code-block:: Coq
+
+   Inductive or (P Q: Prop): Prop :=
+     | Or1 (p: P)
+     | Or2 (q: Q).
+
+   -->
+
+         p : P              q : Q
+   -----------------  -----------------
+    Or1 p :  P \/ Q    Or2 q :  P \/ Q
+|*)
+
+(*|
+La proposition True
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: Coq
+
+   Inductive True : Prop := I.  -->  ----------
+                                      I : True
+
+La proposition False
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: Coq
+
+   Inductive False : Prop := .  -->  pas de preuve de `False` !
+|*)
+
+(*|
+Et la quantification existentielle ?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: Coq
+
+   Inductive ex T (P: T -> Prop) :=
+     ex_intro (t: T) (p: P t).
+
+   -->
+
+             (t : T)  (p : P t)
+   ----------------------------------------
+    @ex_intro T P t p :  exists x : T, P x
+|*)
+
+(*|
+À suivre au prochain cours
+--------------------------
+
+- Retour sur la correspondance de Curry-Howard
+- | Présentation des "tactiques Coq"
+  | pour construire une preuve interactivement/semi-automatiquement !
 |*)
