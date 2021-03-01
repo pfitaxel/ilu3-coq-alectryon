@@ -462,7 +462,7 @@ Type d’une fonction générique
            | forall var : terme, terme  (type d'une fonction générique)
 
 - | Comme on le verra par la suite, `t1 -> t2` est en fait
-  | une syntaxe alternative (plus intuitive) pour "`forall _ : t1, t2`".
+  | une syntaxe alternative (plus intuitive) de "`forall _ : t1, t2`".
 |*)
 
 Check id.
@@ -565,3 +565,144 @@ Definition comp_v4 T1 T2 T3 f (g:T2->T3) (x:T1) := g (f x).
 Definition comp_v5 T1 T2 T3 (f:T1->T2) g (x:T1) : T3 := g (f x).
 
 Eval compute in comp (fun x => x + 1) (fun x => x * 2) 3.
+
+(*|
+Exercices
+---------
+
+1. Ecrire la fonction ``mult2`` retournant le double de son argument.
+|*)
+
+Definition mult2 := (* todo *)0.
+
+(*|
+2. | **Supposons défini** le prédicat `leq: nat -> nat -> bool`,
+     retournant `true` si son 1er argument est inférieur à son second.
+   | Définir la fonction ``max`` retournant le plus grand de ses 2 arguments.
+   | En déduire la fonction ``max3`` retournant le plus grand de ses 3 arguments.
+   | Ecrire une variante ``max3'`` où la définition de ``max`` est locale.
+|*)
+
+Parameter leq : nat -> nat -> bool.
+
+Definition max := (* todo *)0.
+
+Definition max3 := (* todo *)0.
+
+Definition max3' := (* todo *)0.
+
+(*|
+3. Quel est le type de l'expression suivante ?
+|*)
+
+Definition expr3 := fun (T:Type) (f:T -> T) x => f (f x).
+(* *)
+
+(*|
+4. Quel est le type de l'expression suivante ? (donner 2 syntaxes équivalentes)
+|*)
+
+Definition expr4 := fun (T:Type) => T -> T.
+
+(*|
+5. Quel est le type de l'expression suivante ?
+|*)
+
+Definition expr5 := fun (T:Type) (x:T) => x=x.
+
+(*|
+6. Écrire une fonction de type `forall a b : Type, a -> b -> a`
+|*)
+
+Definition expr6 := (* todo *)0.
+
+(*|
+7. Écrire une fonction de type `forall a b : Type, a -> (a -> b) -> b`
+|*)
+
+Definition expr7 := (* todo *)0.
+
+(*|
+8. Écrire une fonction de type
+`forall a b c : Type, (a -> b -> c) -> (a -> b) -> a -> c`
+|*)
+
+Definition expr8 := (* todo *)0.
+
+(*|
+9. Écrire une fonction de type `forall a b c : Type, (a -> c) -> (a -> b -> c)`
+|*)
+
+Definition expr9 := (* todo *)0.
+
+(*|
+10. Écrire une fonction de type
+`forall a b c : Type, (a -> b -> c) -> b -> a -> c`
+|*)
+
+Definition expr10 := (* todo *)0.
+
+(*|
+11. Écrire une fonction de type `forall a b c : Type, (a -> a -> b) -> a -> b`
+|*)
+
+Definition expr11 := (* todo *)0.
+
+(*|
+12. Peut-on écrire une fonction de type `forall a b : Type, a -> b` ?
+|*)
+
+(* En OCaml :
+
+   let exemple =
+
+ *)
+
+(* En Coq ? *)
+
+(*|
+Retour sur `->` et `forall`
+---------------------------
+
+`T1 -> T2` correspond :
+
+-  au type des fonctions de `T1` dans `T2`, c’est-à-dire
+
+-  au type des fonctions qui associent à tout `x:T1` un élément de `T2`,
+
+-  que l’on peut aussi écrire `forall (x : T1), T2`
+
+`forall` est une notation :
+
+-  généralisant `->`,
+
+-  utile lorsque le type d’arrivée `T2` dépend du terme fourni `x`.
+
+Exemples de types définissables en Coq
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  `forall (T : Type), T -> T`
+
+-  `forall (p q : nat), q <> 0 -> nat`
+
+-  `forall (b : bool), if b then nat else bool * bool`
+|*)
+
+(*|
+La correspondance de Curry–Howard : double lecture
+--------------------------------------------------
+
++---------------+------------------------------------+------------------------+
+| Notation      | Lecture fonctionnelle              | Lecture logique        |
++===============+====================================+========================+
+| `x : T`       | `x` a pour type `T`                | `x` "preuve" de `T`    |
++---------------+------------------------------------+------------------------+
+| *aucun* `x:T` | le type `T` est vide               | `T` est insatisfiable  |
++---------------+------------------------------------+------------------------+
+| `P -> Q`      | type des fonctions de `P` dans `Q` | l'implication logique  |
++---------------+------------------------------------+------------------------+
+| `f : P -> Q`  | f est une fonction de `P` dans `Q` | f preuve de ``P => Q`` |
++---------------+------------------------------------+------------------------+
+|               | f transforme une "preuve" de `P` en une "preuve" de `Q`     |
++---------------+-------------------------------------------------------------+
+|*)
