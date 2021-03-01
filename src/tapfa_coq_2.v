@@ -1,7 +1,7 @@
 (*|
-======================================================
-Types Abstraits et Programmation Fonctionnelle Avancée
-======================================================
+====================================
+TAPFA - Partie Coq - Preuve assistée
+====================================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
 :Date:    L3 Info, Semestre 6, Année 2020-2021

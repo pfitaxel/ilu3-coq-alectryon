@@ -1,10 +1,14 @@
 (*|
-======================================================
-Types Abstraits et Programmation Fonctionnelle Avancée
-======================================================
+===============================================
+TAPFA - Partie Coq - Modules et Types Abstraits
+===============================================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
 :Date:    L3 Info, Semestre 6, Année 2020-2021
+
+Supports de ce cours :
+
+-  https://pfitaxel.github.io/tapfa-coq-alectryon/
 
 Modules en Coq et application aux TAD
 =====================================
