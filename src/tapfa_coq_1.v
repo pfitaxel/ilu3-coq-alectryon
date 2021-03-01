@@ -489,9 +489,7 @@ Print id'.
 Print id.
 (* .unfold *)
 
-(* mais *)
-About id'.
-(* id' : forall [T : Type], T -> T *)
+(* mais observer le [T] au lieu de _ *)
 
 (*|
 l'argument T est implicite : il peut être inféré à partir de l'argument d'après.
