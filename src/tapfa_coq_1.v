@@ -441,9 +441,9 @@ Type d’une fonction générique
 
 -  En OCaml: ``id: 'a -> 'a`` :math:`\leadsto` pour tout type ``'a``,
    id prend un argument de type ``'a`` et retourne un résultat de
-   type `'a`
+   type ``'a``
 
--  En Coq: `id: forall a, a -> a`` :math:`\leadsto` la quantification
+-  En Coq: `id: forall a, a -> a` :math:`\leadsto` la quantification
    est explicite
 
 -  extension du langage des termes :
