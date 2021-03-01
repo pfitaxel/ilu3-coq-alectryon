@@ -8,6 +8,7 @@
 ## Méta-données
 
 * cours de [Coq](https://coq.inria.fr)
+* (converti en HTML par [Alectryon](https://github.com/cpitclaudel/alectryon) et [docker-coq-action](https://github.com/coq-community/docker-coq-action))
 * pour l'UE *Types Abstraits et Programmation Fonctionnelle Avancée* (TAPFA)
 * à l'[Université Toulouse III - Paul Sabatier](https://www.univ-tlse3.fr/)
 
