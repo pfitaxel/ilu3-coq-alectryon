@@ -489,10 +489,13 @@ Print id'.
 Print id.
 (* .unfold *)
 
-(* mais observer le [T] au lieu de _ *)
-
+(* mais *)
+About id'.
+(* id' : forall [T : Type], T -> T *)
 (*|
-l'argument T est implicite : il peut être inféré à partir de l'argument d'après.
+(:math:`\leadsto`: noter le [T] au lieu de T)
+
+L'argument T est implicite : il peut être inféré à partir de l'argument d'après.
 
 D'où une syntaxe concise à la OCaml :
 |*)
