@@ -41,8 +41,8 @@ Print th'.
 Les principales tactiques de preuve
 ===================================
 
-La tactique intro (variante : intros H\ :math:`_1` … H\ :math:`_n`)
--------------------------------------------------------------------
+La tactique `intro` (variante : `intros H_1 … H_n`)
+---------------------------------------------------
 
 .. code-block:: Coq
 
@@ -97,8 +97,7 @@ Exemple
 Réécriture (utilisation d’une égalité)
 --------------------------------------
 
-Soit ``E`` : :math:`t_1=t_2` un théorème ou une hypothèse du contexte
-:math:`\Gamma`
+Soit `E : t_1 = t_2` un théorème ou une hypothèse du contexte :math:`\Gamma`
 
 .. code-block:: Coq
 
@@ -147,7 +146,7 @@ Réécriture (cas général où le théorème ``E`` a des conditions)
 
 Soit
 `E : ∀ x1 ... xk,
-p1 x1 ... xk -> ... -> pn x1 ... xk ->
+p1 x1 ... xk -> ⋅⋅⋅ -> pn x1 ... xk ->
 t x1 ... xk = t' x1 ... xk`,
 un théorème ou une hypothèse du contexte :math:`\Gamma`
 
@@ -192,12 +191,12 @@ Réécriture (exemple avec une condition)
 |*)
 
 (*|
-La tactique `apply` (variante : `apply H with (x_i:=v_i`) …)
+La tactique `apply` (variante : `apply H with (x_i:=v_i)` …)
 ------------------------------------------------------------
 
-Soit ``H`` :
-:math:`\forall x_1 \ldots x_k,-p_1-x_1\ldots x_k\rightarrow \cdots
-\rightarrow p_n-x_1\ldots x_k\rightarrow q-x_1\ldots x_k`
+Soit `H : ∀ x1 ... xk,
+p1 x1 ... xk -> ⋅⋅⋅ -> pn x1 ... xk ->
+q x1 ... xk`,
 un théorème ou une hypothèse du contexte :math:`\Gamma`
 
 .. code-block:: Coq
@@ -211,11 +210,13 @@ un théorème ou une hypothèse du contexte :math:`\Gamma`
                                    Γ
                                    ============
                                    pn u1 ... uk
+
+                                   (* n conditions requises pour appliquer H *)
 |*)
 
 (*|
-La tactique apply (exemple)
----------------------------
+La tactique `apply` (exemple)
+-----------------------------
 
 .. coq::
 |*)
@@ -233,8 +234,8 @@ apply le_S.
 Abort.
 (*|
 
-La tactique induction : applique le théorème d’induction
---------------------------------------------------------
+La tactique `induction` : applique le théorème d’induction
+----------------------------------------------------------
 
 .. coq::
 |*)
@@ -244,8 +245,8 @@ induction n.
 Abort.
 (*|
 
-La tactique destruct : preuve par cas
--------------------------------------
+La tactique `destruct` : preuve par cas
+---------------------------------------
 
 .. coq::
 |*)
@@ -254,8 +255,8 @@ Proof.
 destruct n.
 (*|
 
-La tactique simpl : simplification du but
------------------------------------------
+La tactique `simpl` : simplification du but
+-------------------------------------------
 
 .. coq::
 |*)
@@ -303,8 +304,8 @@ Retour sur la correspondance "preuve-programme" (Curry-Howard)
 --------------------------------------------------------------
 
 Coq fournit un langage de tactiques qui permet de construire
-interactivement et incrémentalement, un programme fonctionnel (le
-"terme de preuve").  Lorsque la construction de ce programme est
+**interactivement** et **incrémentalement**, un programme fonctionnel
+(le "terme de preuve").  Lorsque la construction de ce programme est
 terminée, son type est vérifié par Coq au moment du `Qed` par rapport
 au type attendu (c.-à-d. par rapport à la formule logique qui devait
 être démontrée).
