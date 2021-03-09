@@ -13,8 +13,7 @@ Supports de ce cours :
 Principe
 ========
 
--  Prouver une propriété :math:`P` :math:`\equiv` Construire un terme de
-   type :math:`P`.
+-  Prouver une propriété `P` :math:`\equiv` Construire un terme de type `P`.
 
 .. coq::
 |*)
@@ -126,13 +125,30 @@ Soit ``E`` : :math:`t_1=t_2` un théorème ou une hypothèse du contexte
 |*)
 
 (*|
+Réécriture (exemple)
+--------------------
+ *)
+
+Theorem exemple_de_propriete_prouvee_par_reecriture :
+  forall f : nat -> nat,
+    (forall n : nat, f n = f (S n)) ->
+    f 2 = f 0.
+Proof.
+  intros f.
+  intros H.
+  rewrite <- H.
+  rewrite <- H.
+  reflexivity.
+Qed.
+
+(*|
 Réécriture (cas général où le théorème ``E`` a des conditions)
 --------------------------------------------------------------
 
 Soit
-:math:`\mathtt{E}: \forall x_1 \ldots x_k,-p_1-x_1 \ldots x_k\rightarrow \cdots
-\rightarrow p_n-x_1\ldots x_k\rightarrow t-x_1\ldots x_k = t'-x_1\ldots
-x_k`
+`E : ∀ x1 ... xk,
+p1 x1 ... xk -> ... -> pn x1 ... xk ->
+t x1 ... xk = t' x1 ... xk`,
 un théorème ou une hypothèse du contexte :math:`\Gamma`
 
 .. code-block:: Coq
@@ -281,6 +297,39 @@ Autres tactiques Autres tactiques non détaillées dans ces transparents :
 
 Pour plus de détails, voir l’Aide-mémoire des tactiques de preuve Coq
 |*)
+
+(*|
+Retour sur la correspondance "preuve-programme" (Curry-Howard)
+--------------------------------------------------------------
+
+Coq fournit un langage de tactiques qui permet de construire
+interactivement et incrémentalement, un programme fonctionnel (le
+"terme de preuve").  Lorsque la construction de ce programme est
+terminée, son type est vérifié par Coq au moment du `Qed` par rapport
+au type attendu (c.-à-d. par rapport à la formule logique qui devait
+être démontrée).
+
+L'exemple qui suit, qui peut être joué dans la dernière version de
+ProofGeneral en activant deux fonctionnalités spécifiques dans l'IDE,
+illustre ce principe :
+
+-  Menu ``Coq > Show Proof`` (``M-x coq-show-proof-stepwise-toggle RET``)
+-  Menu ``Coq > Diffs > On`` (``ESC ` c D O``)
+
+(en utilisant aussi si besoin, le menu ``Coq > Toggle 3 Windows mode``
+ainsi que le raccourci ``C-c C-l  C-c C-p``)
+|*)
+
+Lemma example :
+  forall A B C : Prop,
+    (A -> B -> C) -> (A /\ B -> C).
+Proof.
+  intros A B C. (* notez l'apparition d'un fun ... *)
+  intros hABC.
+  intros hAB.
+  destruct hAB. (* notez l'apparition d'un match-with ... *)
+  apply hABC; auto.
+Qed.
 
 (*|
 Exemples et exercices autour des listes
