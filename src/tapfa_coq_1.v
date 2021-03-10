@@ -783,11 +783,11 @@ En Coq :
 
 Différences :
 
--  Les constructeurs sont typiquement "curryfiées" en Coq.
+-  Les constructeurs sont typiquement "curryfiés" en Coq.
 
--  Les ``->`` sont remplacées par `=>`
+-  Les `->` sont remplacées par `=>`
 
--  Il y a un ``end`` en plus (pratique)
+-  Il y a un `end` en plus (pratique)
 
 -  Sinon c'est la même syntaxe :-)
 |*)
