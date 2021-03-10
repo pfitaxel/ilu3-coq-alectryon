@@ -881,6 +881,8 @@ Est-ce que la fonction suivante (ou son type) vous rappellent quelque chose ?
      | Zero => fZero
      | Succ n => fSucc n (entier_nat_ind P fZero fSucc n)
      end.
+
+qui a pour type :
 |*)
 
 Check entier_nat_ind.
