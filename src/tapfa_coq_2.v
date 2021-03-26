@@ -407,16 +407,20 @@ Premier lemme – preuve par induction
 
 Prouvons le lemme `app_nil` par induction structurelle sur la liste `l`.
 
-- Si `l` est la liste vide `[]`, on a bien `[] = [] ++ []`
-  en simplifiant la définition de `app`.
+- Cas de base (si `l` est la liste vide `[]`). On doit montrer que
+  `[] = [] ++ []`, soit, après simplification de la définition de `app`,
+  `[] = []`. CQFD.
 
-- Sinon, `l` est de la forme `x :: l'`. En supposant que `l' = l' ++ []`
-  (appelons cette hypothèse d'induction `IHl`), montrons que
-  `x :: l' = (x :: l') ++ []`. En simplifiant la définition de `app`
-  on doit donc prouver que `x :: l' = x :: (l' ++ [])`, soit en appliquant
-  `IHl`, que `x :: l' = x :: l'`.
+- Cas inductif (si `l` est de la forme `x :: l'`).
+  Fixons un `x : T` et un `l' : list T`, supposons que `l' = l' ++ []`
+  et appelons cette hypothèse d'induction `IHl`.
+  Montrons qu'alors `x :: l' = (x :: l') ++ []`.
+  En simplifiant la définition de `app` on doit donc prouver que
+  `x :: l' = x :: (l' ++ [])`, soit après avoir utilisé `IHl`, que
+  `x :: l' = x :: l'`. CQFD.
 
-En Coq :
+Premier lemme – preuve par induction (version Coq)
+--------------------------------------------------
 
 .. coq::
 |*)
