@@ -4,7 +4,7 @@ TAPFA - Partie Coq
 ==================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
-:Date:    L3 Info, Semestre 6, Année 2020-2021
+:Date:    L3 Info, Semestre 6, Année 2021-2022
 
 Supports de ce cours :
 
@@ -24,7 +24,7 @@ Présentation du logiciel Coq
 
 -  Initié par Thierry Coquand et Gérard Huet, et développé par Inria
    depuis 1984 (la dernière version stable étant, lors de l'écriture de
-   ce document, Coq 8.13).
+   ce document, Coq 8.15.0).
 
 .. image:: https://img.shields.io/docker/v/coqorg/coq/latest
    :alt: coq latest version
