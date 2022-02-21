@@ -101,7 +101,7 @@ Rappel : installation de l’environnement de TP
 Environnement recommandé
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Coq 8.12 + Emacs + ProofGeneral + Company-Coq
+-  Coq 8.15 + Emacs + ProofGeneral + Company-Coq
    [cf. `tutoriel <https://github.com/erikmd/tapfa-init.el>`_]
 
 -  Carte de référence / raccourcis clavier [cf. Moodle]
@@ -117,7 +117,11 @@ Tutoriel d’installation
 
 -  à installer avant le 1er TP TAPFA-Coq
 
--  n’hésitez pas à poser des questions sur Moodle/Discord
+-  avant cela, jsCoq peut être utilisé dans votre navigateur :
+
+  `<https://jscoq.github.io/scratchpad.html>`_
+
+-  n’hésitez pas à poser des questions sur Moodle
 |*)
 
 (*|
