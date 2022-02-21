@@ -669,7 +669,7 @@ Definition expr9 := (* todo *)0.
 Definition expr10 := (* todo *)0.
 
 (*|
-11. Écrire une fonction de type `forall a b c : Type, (a -> a -> b) -> a -> b`
+11. Écrire une fonction de type `forall a b : Type, (a -> a -> b) -> a -> b`
 |*)
 
 Definition expr11 := (* todo *)0.
