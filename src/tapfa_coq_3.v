@@ -4,7 +4,7 @@ TAPFA - Partie Coq - Modules et Types Abstraits
 ===============================================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
-:Date:    L3 Info, Semestre 6, Année 2020-2021
+:Date:    L3 Info, Semestre 6, Année 2021-2022
 
 Supports de ce cours :
 
