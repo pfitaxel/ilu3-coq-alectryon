@@ -51,7 +51,9 @@ jobs:
               for item in ${{ matrix.src }}; do
                 cp -av "src/$item" "output/$item"
                 alectryon/alectryon.py --frontend coq+rst "src/$item" \
+                  --html-dialect=html5 \
                   --backend webpage --output-directory output
+                cat src/self_link.css >>output/docutils_basic.css
               done
             endGroup
       - name: Revert permissions
