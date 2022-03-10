@@ -97,7 +97,7 @@ Exemple
 Réécriture (utilisation d’une égalité)
 --------------------------------------
 
-Soit `E : t_1 = t_2` un théorème ou une hypothèse du contexte :math:`\Gamma`
+Soit `E : t1 = t2` un théorème ou une hypothèse du contexte :math:`\Gamma`
 
 .. code-block:: Coq
 
