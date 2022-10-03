@@ -869,6 +869,24 @@ Fixpoint long_v2 T (l : liste T) :=
 Eval compute in long_v2 liste1.
 
 (*|
+**Remarque**: Coq n'est pas limité aux fonctions primitives récursives. Par exemple, la fonction d'Ackermann peut être définie comme ci-dessous et il serait possible de démontrer qu'elle vérifie la définition usuelle.
+|*)
+
+Fixpoint pow (f:nat->nat) n a :=
+  match n with
+    0 => a
+  | S p => pow f p (f a)
+  end.
+
+Fixpoint ack a b : nat :=
+match a with
+| 0 => S b
+| S a => pow (ack a) (S b) 1
+end.
+
+Eval compute in (ack 3 4).            
+
+(*|
 Schémas inductifs
 -----------------
 

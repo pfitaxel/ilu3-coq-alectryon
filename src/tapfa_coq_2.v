@@ -283,7 +283,7 @@ définie récursivement par rapport à son premier argument :
       ∀ n : nat, n + 0 = n
       ∀ n : nat, n + 1 = S n
 
-Autres tactiques Autres tactiques non détaillées dans ces transparents :
+Autres tactiques non détaillées dans ces transparents :
 
 -  `exact`
 
