@@ -4,7 +4,7 @@ ILU3 - Partie Coq
 =================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel (resp. UE), Pierre Roux
-:Date:    L3 Info, Semestre 6, Année 2023-2024
+:Date:    L3 Info, Année 2023-2024
 
 Supports de ce cours :
 
