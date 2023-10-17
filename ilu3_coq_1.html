@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" class="alectryon-standalone" xml:lang="en" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="generator" content="Docutils 0.20.1: https://docutils.sourceforge.io/" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="dcterms.date" content="L3 Info, Semestre 6, Année 2021-2022" />
+<title>ILU3 - Partie Coq</title>
+<link rel="schema.dcterms" href="http://purl.org/dc/terms/"/><script type="text/javascript" defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js?config=TeX-AMS_CHTML"></script>
+<link rel="stylesheet" href="alectryon.css" type="text/css" />
+<link rel="stylesheet" href="docutils_basic.css" type="text/css" />
+<link rel="stylesheet" href="pygments.css" type="text/css" />
+<script type="text/javascript" src="alectryon.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.4/css/ibm-type.min.css" integrity="sha512-sky5cf9Ts6FY1kstGOBHSybfKqdHR41M0Ldb0BjNiv3ifltoQIsg0zIaQ+wwdwgQ0w9vKFW7Js50lxH9vqNSSw==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/firacode/5.2.0/fira_code.min.css" integrity="sha512-MbysAYimH1hH2xYzkkMHB6MqxBqfP0megxsCLknbYqHVwXTCg9IqHbk+ZP/vnhO8UEW6PaXAkKe2vQ+SWACxxA==" crossorigin="anonymous" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="alectryon-root alectryon-centered"><div class="alectryon-banner">Built with <a href="https://github.com/cpitclaudel/alectryon/">Alectryon</a>, running Coq+SerAPI v8.12.0+0.12.1. Bubbles (<span class="alectryon-bubble"></span>) indicate interactive fragments: hover for details, tap to reveal contents. Use <kbd>Ctrl+↑</kbd> <kbd>Ctrl+↓</kbd> to navigate, <kbd>Ctrl+🖱️</kbd> to focus. On Mac, use <kbd>⌘</kbd> instead of <kbd>Ctrl</kbd>.</div><main id="ilu3-partie-coq">
+<h1 class="title">ILU3 - Partie Coq</h1>
+<dl class="docinfo simple">
+<dt class="auteurs">Auteurs<span class="colon">:</span></dt>
+<dd class="auteurs"><p>Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel (resp. UE), Pierre Roux</p>
+</dd>
+<dt class="date">Date<span class="colon">:</span></dt>
+<dd class="date">L3 Info, Semestre 6, Année 2021-2022</dd>
+</dl>
+<input type="checkbox" class="alectryon-toggle" id="alectryon-toggle-0" /><label for="alectryon-toggle-0" class="alectryon-toggle-label">Display all goals and responses</label><div class="alectryon-container docutils container">
+<p>Supports de ce cours :</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pfitaxel.github.io/ilu3-coq-alectryon/">https://pfitaxel.github.io/ilu3-coq-alectryon/</a></p></li>
+</ul>
+<section id="apercu-des-fonctionnalites-de-coq">
+<h2>Aperçu des fonctionnalités de Coq<a class="self-link" title="link to this section" href="#apercu-des-fonctionnalites-de-coq"></a></h2>
+<section id="presentation-du-logiciel-coq">
+<h3>Présentation du logiciel Coq<a class="self-link" title="link to this section" href="#presentation-du-logiciel-coq"></a></h3>
+<ul class="simple">
+<li><p>Implémenté en OCaml</p></li>
+</ul>
+<a class="reference external image-reference" href="https://coq.inria.fr"><img alt="Coq" src="https://coq.inria.fr/files/barron_logo.png" /></a>
+<ul class="simple">
+<li><p>Initié par Thierry Coquand et Gérard Huet, et développé par Inria
+depuis 1984 (la dernière version stable étant, lors de l'écriture de
+ce document, Coq 8.15.0).</p></li>
+</ul>
+<a class="reference external image-reference" href="https://github.com/coq/coq/releases"><img alt="coq latest version" src="https://img.shields.io/docker/v/coqorg/coq/latest" /></a>
+<ul>
+<li><p>Comprend un langage fonctionnel pur, statiquement typé, et
+<em>très expressif</em> (on détaillera cet aspect dans quelques minutes),
+muni d’un environnement de preuve interactive (vu au Cours n°2).</p></li>
+<li><p>Coq a une grande communauté d’utilisateurs. Projets notables :</p>
+<ul>
+<li><p>CompCert : compilateur C99 complètement prouvé en Coq [Inria]</p></li>
+<li><p>C-CoRN : bibliothèque d’analyse constructive [à Nijmegen]</p></li>
+<li><p>Preuve formelle du théorème des 4 couleurs [G. Gonthier,
+B. Werner]</p></li>
+<li><p>MathComp : bibliothèque d’algèbre et preuve formelle du théorème
+de Feit–Thompson (la preuve papier fait <span class="math">\({&gt;}300\)</span> pages)
+[Inria, Microsoft Research]</p></li>
+<li><div class="line-block">
+<div class="line">Vérification de systèmes critiques (voir par exemple :</div>
+<div class="line"><a class="reference external" href="https://github.com/ligurio/practical-fm">https://github.com/ligurio/practical-fm</a>)</div>
+</div>
+</li>
+<li><p><a class="reference external" href="https://github.com/mit-plv/fiat-crypto">FiatCrypto</a> :
+&quot;Simple High-Level Code For Cryptographic Arithmetic: With
+Proofs, Without Compromises&quot; (<em>Implementations from our library
+were included in BoringSSL to replace existing specialized code,
+for inclusion in several large deployments for Chrome, Android,
+and CloudFlare.</em>)</p></li>
+</ul>
+</li>
+<li><p>Ouvrage (publié chez Springer et téléchargeable en français) :</p>
+<p><a class="reference external" href="http://www.labri.fr/perso/casteran/CoqArt/coqartF.pdf">Coq'Art: Interactive Theorem Proving and Program Development</a></p>
+</li>
+</ul>
+</section>
+<section id="caracteristiques-interessantes-de-coq">
+<h3>Caractéristiques intéressantes de Coq<a class="self-link" title="link to this section" href="#caracteristiques-interessantes-de-coq"></a></h3>
+<ul>
+<li><p>langage fonctionnel pur proche d’OCaml</p>
+<ul class="simple">
+<li><p>terminaison garantie (impossible d’écrire <span class="docutils literal">let rec f x = f x</span>)</p></li>
+<li><p>typage fort et très expressif (on peut définir des listes à taille
+fixée, des fonctions à arité variable, etc.)</p></li>
+</ul>
+</li>
+<li><div class="line-block">
+<div class="line">langage logique (expression de formules quantifiées, etc.)</div>
+<div class="line"><code class="highlight coq"><span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">nat</span><span class="o">,</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="kr">exists</span> <span class="nv">m</span> <span class="o">:</span> <span class="n">nat</span><span class="o">,</span> <span class="n">S</span> <span class="n">m</span> <span class="o">=</span> <span class="n">n</span></code></div>
+</div>
+</li>
+<li><p>environnement de preuve (assistance à la construction de preuve)</p></li>
+<li><div class="line-block">
+<div class="line">vérification automatique de la correction de ces preuves</div>
+<div class="line">vérification de preuve = vérification de type</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">tactiques utilisateur pour automatiser les preuves :</div>
+<div class="line"><code class="highlight coq"><span class="bp">tauto</span></code> pour la logique des propositions,</div>
+<div class="line"><code class="highlight coq"><span class="nb">firstorder</span></code> pour la logique du premier ordre,</div>
+<div class="line"><code class="highlight coq"><span class="bp">lia</span></code> pour l’arithmétique linéaire sur les entiers
+(<code class="highlight coq"><span class="mi">2</span> <span class="o">*</span> <span class="o">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">n</span></code>)</div>
+<div class="line">etc.</div>
+</div>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Require Import</span> Lia. <span class="c">(* pour utiliser la tactique &quot;lia&quot; *)</span></span></span></pre></li>
+</ul>
+</section>
+<section id="rappel-installation-de-lenvironnement-de-tp">
+<h3>Rappel : installation de l’environnement de TP<a class="self-link" title="link to this section" href="#rappel-installation-de-lenvironnement-de-tp"></a></h3>
+<section id="environnement-recommande">
+<h4>Environnement recommandé<a class="self-link" title="link to this section" href="#environnement-recommande"></a></h4>
+<ul class="simple">
+<li><p>Coq 8.15 + Emacs + ProofGeneral + Company-Coq
+[cf. <a class="reference external" href="https://github.com/erikmd/tapfa-init.el">tutoriel</a>]</p></li>
+<li><p>Carte de référence / raccourcis clavier [cf. Moodle]</p></li>
+<li><p>Dictionnaire OCaml/Coq [cf. Moodle ; autorisé à l'examen a priori]</p></li>
+</ul>
+</section>
+<section id="tutoriel-dinstallation">
+<h4>Tutoriel d’installation<a class="self-link" title="link to this section" href="#tutoriel-dinstallation"></a></h4>
+<ul>
+<li><p>avec OPAM, sous GNU/Linux, macOS ou Windows 10 :</p>
+<p><a class="reference external" href="https://github.com/erikmd/tapfa-init.el">https://github.com/erikmd/tapfa-init.el</a></p>
+</li>
+<li><p>à installer avant le 1er TP ILU3-Coq</p></li>
+<li><p>avant cela, jsCoq peut être utilisé dans votre navigateur :</p></li>
+</ul>
+<blockquote>
+<p><a class="reference external" href="https://jscoq.github.io/scratchpad.html">https://jscoq.github.io/scratchpad.html</a></p>
+</blockquote>
+<ul class="simple">
+<li><p>n’hésitez pas à poser des questions sur Moodle</p></li>
+</ul>
+</section>
+</section>
+<section id="utilisations-possibles-de-coq">
+<h3>Utilisations possibles de Coq<a class="self-link" title="link to this section" href="#utilisations-possibles-de-coq"></a></h3>
+<ul class="simple">
+<li><p>Synthèse du type d’une expression :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk0" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk0"><span class="kn">Check</span> <span class="kr">fun</span> <span class="nv">x</span> <span class="nv">y</span> =&gt; x + y + <span class="mi">1</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kr">fun</span> <span class="nv">x</span> <span class="nv">y</span> : nat =&gt; x + y + <span class="mi">1</span>
+     : nat -&gt; nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><ul class="simple">
+<li><p>Évaluation d’expressions (calcul) :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk1" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> (<span class="kr">fun</span> <span class="nv">x</span> <span class="nv">y</span> =&gt; x+y+<span class="mi">1</span>) <span class="mi">2</span> <span class="mi">3</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= <span class="mi">6</span>
+: nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><ul class="simple">
+<li><p>Implantation de fonctions et vérification de leurs propriétés :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">f</span> <span class="nv">x</span> := x + <span class="mi">2</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk2" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2"><span class="kn">Theorem</span> <span class="nf">f_croissante</span> : <span class="kr">forall</span> <span class="nv">x</span> <span class="nv">y</span> : nat, x &lt; y -&gt; f x &lt; f y.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">x</span> <span class="nv">y</span> : nat, x &lt; y -&gt; f x &lt; f y</div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk3" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk3"><span class="kn">Proof</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">x</span> <span class="nv">y</span> : nat, x &lt; y -&gt; f x &lt; f y</div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* On ne détaille pas pour le moment le script de preuve =&gt; Cours 2 *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Qed</span>.</span></span></pre><ul class="simple">
+<li><p>Définition de sous-types :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">Mod3</span> := {x : nat | x &lt; <span class="mi">3</span>}.</span></span></pre><ul class="simple">
+<li><p>Synthèse de fonctions à partir d’une preuve de sa spécification :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk4" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk4"><span class="kn">Definition</span> <span class="nf">pred</span> :
+  <span class="kr">forall</span> <span class="nv">n</span> : nat, <span class="c">(* précond *)</span> n &gt; <span class="mi">0</span> -&gt;
+    {m : nat | <span class="c">(* postcond *)</span> S m = n}.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">n</span> : nat, n &gt; <span class="mi">0</span> -&gt; {m : nat | S m = n}</div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk5" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk5"><span class="kn">Proof</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">n</span> : nat, n &gt; <span class="mi">0</span> -&gt; {m : nat | S m = n}</div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* On ne détaille pas pour le moment le script de preuve *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Defined</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Require</span> <span class="kn">Extraction</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* Génération automatique de code OCaml à partir du code Coq prouvé *)</span>
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk6" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk6"><span class="kn">Recursive Extraction</span> pred.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">
+type nat =
+| O
+| S of nat
+
+type &#39;a sig0 = &#39;a
+  <span class="c">(* singleton inductive, whose constructor was exist *)</span>
+
+<span class="sd">(** val pred : nat -&gt; nat **)</span>
+
+<span class="kr">let</span> <span class="nv">pred</span> = function
+| O -&gt; <span class="nb">assert</span> false <span class="c">(* absurd case *)</span>
+| S n&#39; -&gt; n&#39;
+</blockquote></div></div></small></span></pre></section>
+</section>
+<section id="motivations-pour-utiliser-coq">
+<h2>Motivations pour utiliser Coq<a class="self-link" title="link to this section" href="#motivations-pour-utiliser-coq"></a></h2>
+<section id="positionnement-de-coq-par-rapport-aux-types-abstraits">
+<h3>Positionnement de Coq par rapport aux types abstraits<a class="self-link" title="link to this section" href="#positionnement-de-coq-par-rapport-aux-types-abstraits"></a></h3>
+<section id="par-rapport-a-pfita">
+<h4>Par rapport à PFITA<a class="self-link" title="link to this section" href="#par-rapport-a-pfita"></a></h4>
+<ul>
+<li><p><strong>explicitation des axiomes</strong> dans la spécification des types abstraits</p></li>
+<li><p><strong>preuve formelle</strong> que l'implémentation satisfait bien la spécification</p></li>
+<li><p>compilation et <strong>vérification</strong> modulaire possible</p>
+<p>(implémentation et <strong>vérification</strong> d'un composant utilisateur
+indépendemment de l'implémentation du composant utilisé)</p>
+</li>
+<li><p>donc : plus besoin de tests unitaires ou d'intégration...</p></li>
+<li><p>mais : Toujours besoin de <strong>validation</strong> de l'implémentation par
+rapport aux exigences attendues (qui peuvent différer des exigences
+exprimées dans le cahier des charges !)</p>
+<p>Voir aussi : la notion de <a class="reference external" href="https://en.wikipedia.org/wiki/V%20&amp;%20V">V &amp; V</a></p>
+</li>
+</ul>
+</section>
+</section>
+<section id="exemple-de-verification-modulaire">
+<h3>Exemple de vérification modulaire<a class="self-link" title="link to this section" href="#exemple-de-verification-modulaire"></a></h3>
+<ul class="simple">
+<li><p>Définition d'une signature</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Module Type</span> <span class="nf">tPickGt</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Parameter</span> <span class="nv">pick</span> : nat -&gt; nat.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Axiom</span> <span class="nv">pick_gt</span> : <span class="kr">forall</span> <span class="nv">n</span>, pick n &gt; n.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">tPickGt</span>.</span></span></pre><ul class="simple">
+<li><p>Implantation de la signature</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Module</span> <span class="nf">PickGt</span> &lt;: tPickGt. <span class="c">(* vérif conformité sans masquage *)</span></span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">pick</span> <span class="nv">n</span> := S n.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk7" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk7"><span class="kn">Lemma</span> <span class="nf">pick_gt</span> : <span class="kr">forall</span> <span class="nv">n</span>, pick n &gt; n.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">n</span> : nat, pick n &gt; n</div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk8" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk8"><span class="kn">Proof</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">n</span> : nat, pick n &gt; n</div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="nb">auto</span>.</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Qed</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">PickGt</span>.</span></span></pre><ul class="simple">
+<li><p>Utilisation d'un module respectant la signature</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Module</span> <span class="nf">Use</span> (P : tPickGt).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">num</span> := P.pick O.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk9" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk9"><span class="kn">Lemma</span> <span class="nf">num_gt0</span> : num &gt; O.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion">num &gt; <span class="mi">0</span></div></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chka" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chka"><span class="kn">Proof</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion">num &gt; <span class="mi">0</span></div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="nb">apply</span> P.pick_gt.</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Qed</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">Use</span>.</span></span></pre><ul class="simple">
+<li><p>Instantiation du module paramétré</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Module</span> <span class="nf">M</span> := Use(PickGt).</span></span></pre></section>
+</section>
+<section id="introduction-a-coq">
+<h2>Introduction à Coq<a class="self-link" title="link to this section" href="#introduction-a-coq"></a></h2>
+<section id="types-et-expressions">
+<h3>Types et expressions<a class="self-link" title="link to this section" href="#types-et-expressions"></a></h3>
+<div class="line-block">
+<div class="line">À retenir :</div>
+<div class="line">En Coq, tout terme bien formé a un type (y compris les types !)</div>
+<div class="line">donc contrairement à OCaml, les termes/expressions et les types ne
+forment pas deux &quot;collections disjointes&quot;</div>
+</div>
+</section>
+<section id="exemples-dexpressions-coq-et-leur-type">
+<h3>Exemples d’expressions Coq et leur type<a class="self-link" title="link to this section" href="#exemples-dexpressions-coq-et-leur-type"></a></h3>
+<table>
+<thead>
+<tr><th class="head"><p>valeur/programme</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>type de type</p></th>
+<th class="head"><p>…</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p><code class="highlight coq"><span class="mi">0</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">nat</span></code></p></td>
+<td><p>Set</p></td>
+<td><p>…</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">true</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">bool</span></code></p></td>
+<td><p>Set</p></td>
+<td><p>…</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="kr">fun</span> <span class="nv">x</span> <span class="o">=&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">nat</span> <span class="o">-&gt;</span> <span class="n">nat</span></code></p></td>
+<td><p>Set</p></td>
+<td><p>…</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chkb" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chkb"><span class="kn">Check</span> <span class="mi">0</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="mi">0</span>
+     : nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chkc" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chkc"><span class="kn">Check</span> true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chkd" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chkd"><span class="kn">Check</span> <span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kr">fun</span> <span class="nv">x</span> : nat =&gt; x + <span class="mi">1</span>
+     : nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chke" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chke"><span class="kn">Check</span> nat.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">nat
+     : <span class="kt">Set</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chkf" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chkf"><span class="kn">Check</span> <span class="kt">Set</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kt">Set</span>
+     : <span class="kt">Type</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></section>
+<section id="exemples-avances-dexpressions-coq-et-leur-type">
+<h3>Exemples avancés d’expressions Coq et leur type<a class="self-link" title="link to this section" href="#exemples-avances-dexpressions-coq-et-leur-type"></a></h3>
+<table>
+<thead>
+<tr><th class="head"><p>valeur/programme</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>type de type</p></th>
+<th class="head"><p>…</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p><code class="highlight coq"><span class="n">list</span></code></p></td>
+<td><p><code class="highlight coq"><span class="kt">Type</span> <span class="o">-&gt;</span> <span class="kt">Type</span></code></p></td>
+<td><p><code class="highlight coq"><span class="kt">Type</span></code></p></td>
+<td><p>…</p></td>
+</tr>
+<tr><td><p>&quot;preuve de <code class="highlight coq"><span class="mi">2</span><span class="o">&lt;=</span><span class="mi">2</span></code>&quot;</p></td>
+<td><p><code class="highlight coq"><span class="mi">2</span> <span class="o">&lt;=</span> <span class="mi">2</span></code></p></td>
+<td><p><code class="highlight coq"><span class="kt">Prop</span></code></p></td>
+<td><p>…</p></td>
+</tr>
+<tr><td><p>&quot;(1; preuve de <code class="highlight coq"><span class="mi">1</span><span class="o">&gt;</span><span class="mi">0</span></code>)&quot;</p></td>
+<td><p><code class="highlight coq"><span class="o">{</span><span class="n">x</span><span class="o">:</span> <span class="n">nat</span> <span class="o">|</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">}</span></code></p></td>
+<td><p><code class="highlight coq"><span class="kt">Set</span></code></p></td>
+<td><p>…</p></td>
+</tr>
+</tbody>
+</table>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk10" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk10"><span class="kn">Check</span> <span class="mi">2</span> &lt;= <span class="mi">2</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="mi">2</span> &lt;= <span class="mi">2</span>
+     : <span class="kt">Prop</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk11" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk11"><span class="kn">Check</span> le <span class="mi">2</span> <span class="mi">2</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="mi">2</span> &lt;= <span class="mi">2</span>
+     : <span class="kt">Prop</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk12" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk12"><span class="kn">Check</span> le_n <span class="mi">2</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">le_n <span class="mi">2</span>
+     : <span class="mi">2</span> &lt;= <span class="mi">2</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk13" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk13"><span class="kn">Check</span> le_n.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">le_n
+     : <span class="kr">forall</span> <span class="nv">n</span> : nat, n &lt;= n</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk14" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk14"><span class="kn">Check</span> le.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">le
+     : nat -&gt; nat -&gt; <span class="kt">Prop</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+<span class="c">(* Prop est le type des formules logiques *)</span>
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk15" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk15"><span class="kn">Check</span> <span class="kt">Prop</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kt">Prop</span>
+     : <span class="kt">Type</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></section>
+<section id="remarques">
+<h3>Remarques<a class="self-link" title="link to this section" href="#remarques"></a></h3>
+<ul class="simple">
+<li><p><code class="highlight coq"><span class="kt">Prop</span></code> est le type des formules logiques ;</p></li>
+<li><p>à ne pas confondre avec <code class="highlight coq"><span class="n">bool</span></code>, le type des booléens.</p></li>
+</ul>
+<p>Les deux ont leur utilité :</p>
+<ul class="simple">
+<li><p>les prédicats renvoyant un <code class="highlight coq"><span class="n">bool</span></code> correspondent à des &quot;prédicats calculables&quot;
+(par exemple un algorithme décidant si un entier est pair ou pas) :
+on peut déterminer leur résultat par un <em>calcul</em> ;</p></li>
+<li><p>les prédicats renvoyant un <code class="highlight coq"><span class="kt">Prop</span></code> correspondent à des &quot;prédicats logiques&quot;
+(définis par une formule) :
+on peut prouver leur véracité par un <em>raisonnement</em>.</p></li>
+</ul>
+</section>
+<section id="le-type-des-listes-comparaison-ocaml-coq">
+<h3>Le type des listes : comparaison OCaml / Coq<a class="self-link" title="link to this section" href="#le-type-des-listes-comparaison-ocaml-coq"></a></h3>
+<table>
+<thead>
+<tr><th class="head"><p>OCaml</p></th>
+<th class="head"><p>Coq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p><code class="highlight coq"><span class="o">'</span><span class="n">a</span> <span class="n">list</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">list</span> <span class="n">a</span></code></p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">bool</span> <span class="n">list</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">list</span> <span class="n">bool</span></code></p></td>
+</tr>
+<tr><td><p>notation spéciale, mais familière</p></td>
+<td><p><code class="highlight coq"><span class="n">list</span></code> est une fonction : <code class="highlight coq"><span class="kt">Type</span> <span class="o">-&gt;</span> <span class="kt">Type</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk16" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk16"><span class="kn">Check</span> list.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">list
+     : <span class="kt">Type</span> -&gt; <span class="kt">Type</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></section>
+<section id="elements-de-syntaxe">
+<h3>Éléments de syntaxe<a class="self-link" title="link to this section" href="#elements-de-syntaxe"></a></h3>
+<ul>
+<li><p>Les mots &quot;terme&quot; et &quot;expression&quot; sont synonymes.</p></li>
+<li><div class="line-block">
+<div class="line">Rappel :</div>
+<div class="line">En Coq, tout terme bien formé a un type (y compris les types !) ;</div>
+<div class="line">contrairement à OCaml, les termes/expressions et les types ne
+forment pas deux &quot;collections disjointes&quot; ;</div>
+<div class="line">donc la grammaire des termes ci-dessous contient aussi Type, Set, Prop :</div>
+</div>
+</li>
+</ul>
+<pre class="code Coq literal-block"><code><span class="n">terme</span> <span class="o">::=</span> <span class="kt">Type</span> <span class="o">|</span> <span class="kt">Set</span> <span class="o">|</span> <span class="kt">Prop</span>           <span class="s2">&quot;sortes&quot;</span> <span class="o">(=</span> <span class="n">types</span> <span class="n">de</span> <span class="n">type</span><span class="o">)</span>
+        <span class="o">|</span> <span class="n">var</span>                         <span class="s2">&quot;variable&quot;</span>
+        <span class="o">|</span> <span class="o">(</span> <span class="n">terme</span> <span class="o">)</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="n">terme</span>                 <span class="s2">&quot;application&quot;</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="n">op</span> <span class="n">terme</span>              <span class="s2">&quot;opérateur infixe&quot;</span>
+        <span class="o">|</span> <span class="kr">fun</span> <span class="nv">var</span> <span class="o">:</span> <span class="n">terme</span> <span class="o">⇒</span> <span class="n">terme</span>     <span class="s2">&quot;abstraction&quot;</span>
+        <span class="o">|</span> <span class="kr">let</span> <span class="nv">var</span> <span class="o">:=</span> <span class="n">terme</span> <span class="kr">in</span> <span class="n">terme</span>   <span class="s2">&quot;définition locale&quot;</span>
+        <span class="o">|</span> <span class="kr">if</span> <span class="n">terme</span> <span class="kr">then</span> <span class="n">terme</span> <span class="kr">else</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="o">-&gt;</span> <span class="n">terme</span>              <span class="s2">&quot;type flèche&quot;</span> <span class="o">(=</span> <span class="n">type</span> <span class="n">des</span> <span class="n">fonctions</span><span class="o">)</span></code></pre>
+</section>
+<section id="exemples">
+<h3>Exemples<a class="self-link" title="link to this section" href="#exemples"></a></h3>
+<p>Que renvoient les commandes suivantes ?</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk17" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk17"><span class="kn">Check</span> <span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kr">fun</span> <span class="nv">x</span> : nat =&gt; x + <span class="mi">1</span>
+     : nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk18" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk18"><span class="kn">Check</span> (<span class="kr">fun</span> <span class="nv">f</span> <span class="nv">x</span> =&gt; f (f x)) (<span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>).</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">(<span class="kr">fun</span> (<span class="nv">f</span> : nat -&gt; nat) (<span class="nv">x</span> : nat) =&gt; f (f x))
+  (<span class="kr">fun</span> <span class="nv">x</span> : nat =&gt; x + <span class="mi">1</span>)
+     : nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk19" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk19"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> (<span class="kr">fun</span> <span class="nv">f</span> <span class="nv">x</span> =&gt; f (f x)) (<span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>) <span class="mi">3</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= <span class="mi">5</span>
+: nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">f1</span> := <span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>.</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk1a" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1a"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> f1 <span class="mi">0</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= <span class="mi">1</span>
+: nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">double</span> <span class="nv">f</span> := <span class="kr">fun</span> (<span class="nv">x</span> : nat) =&gt; f (f x).</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk1b" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1b"><span class="kn">Check</span> double.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">double
+     : (nat -&gt; nat) -&gt; nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">double2</span> (<span class="nv">f</span> : nat -&gt; nat) := <span class="kr">fun</span> <span class="nv">x</span> =&gt; f (f x).</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk1c" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1c"><span class="kn">Check</span> double2.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">double2
+     : (nat -&gt; nat) -&gt; nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk1d" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1d"><span class="kn">Fail</span> <span class="kn">Definition</span> <span class="nf">double3</span> <span class="nv">f</span> := <span class="kr">fun</span> <span class="nv">x</span> =&gt; f (f x).</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">The command has indeed failed <span class="kr">with</span> message:
+The following term contains unresolved implicit arguments:
+  (<span class="kr">fun</span> (<span class="nv">f</span> : <span class="nl">?T</span> -&gt; <span class="nl">?T</span>) (<span class="nv">x</span> : <span class="nl">?T</span>) =&gt; f (f x))
+More precisely: 
+- <span class="nl">?T</span>: Cannot infer <span class="nl">?T</span> <span class="kr">in</span> the partial instance
+  <span class="s2">&quot;?T -&gt; ?T&quot;</span> found <span class="kr">for</span> the <span class="kp">type of</span> f.</blockquote></div></div></small></span></pre><p>Cette dernière définition est refusée car en Coq, les <em>paramètres de
+généricité</em> sont explicites. Pas de synthèse automatique de leur nom ;
+il faut expliciter ces arguments.</p>
+</section>
+<section id="genericite">
+<h3>Généricité<a class="self-link" title="link to this section" href="#genericite"></a></h3>
+<p>Une fonction générique prend un type en paramètre.</p>
+<p>Exemple de définition d'une fonction générique : la fonction identité.</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id</span> := <span class="kr">fun</span> (<span class="nv">T</span> : <span class="kt">Type</span>) =&gt; <span class="kr">fun</span> (<span class="nv">x</span> : T) =&gt; x.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id_v2</span> := <span class="kr">fun</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) =&gt; x.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id_v3</span> (<span class="nv">T</span> : <span class="kt">Type</span>) := <span class="kr">fun</span> (<span class="nv">x</span> : T) =&gt; x.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id_v4</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) := x.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id_v5</span> <span class="nv">T</span> (<span class="nv">x</span> : T) := x.</span></span></pre><p><span class="math">\(\leadsto\)</span> ces fonctions ont toutes 2 arguments !</p>
+<p>Utilisation d’une fonction générique</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk1e" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1e"><span class="kn">Check</span> id nat.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id nat
+     : nat -&gt; nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk1f" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk1f"><span class="kn">Check</span> id nat <span class="mi">0</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id nat <span class="mi">0</span>
+     : nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk20" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk20"><span class="kn">Check</span> id bool.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id bool
+     : bool -&gt; bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk21" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk21"><span class="kn">Check</span> id bool true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id bool true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk22" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk22"><span class="kn">Print</span> id.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id = 
+<span class="kr">fun</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) =&gt; x
+     : <span class="kr">forall</span> <span class="nv">T</span> : <span class="kt">Type</span>, T -&gt; T
+
+<span class="kn">Arguments</span> id _%type_scope</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></section>
+<section id="genericite-et-typage">
+<h3>Généricité et typage<a class="self-link" title="link to this section" href="#genericite-et-typage"></a></h3>
+<p>Type d’une fonction générique</p>
+<ul class="simple">
+<li><p>En OCaml : <span class="docutils literal">id : 'a <span class="pre">-&gt;</span> 'a</span> <span class="math">\(\leadsto\)</span> pour tout type <span class="docutils literal">'a</span>,
+id prend un argument de type <span class="docutils literal">'a</span> et retourne un résultat de
+type <span class="docutils literal">'a</span></p></li>
+<li><p>En Coq : <code class="highlight coq"><span class="n">id</span> <span class="o">:</span> <span class="kr">forall</span> <span class="nv">a</span><span class="o">,</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span></code> <span class="math">\(\leadsto\)</span> la quantification
+est explicite</p></li>
+<li><p>extension du langage des termes :</p></li>
+</ul>
+<pre class="code Coq literal-block"><code><span class="n">terme</span> <span class="o">::=</span> <span class="kt">Type</span> <span class="o">|</span> <span class="kt">Set</span> <span class="o">|</span> <span class="kt">Prop</span>
+        <span class="o">|</span> <span class="n">var</span>
+        <span class="o">|</span> <span class="o">(</span> <span class="n">terme</span> <span class="o">)</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="n">op</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="kr">fun</span> <span class="nv">var</span> <span class="o">:</span> <span class="n">terme</span> <span class="o">⇒</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="kr">let</span> <span class="nv">var</span> <span class="o">:=</span> <span class="n">terme</span> <span class="kr">in</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="kr">if</span> <span class="n">terme</span> <span class="kr">then</span> <span class="n">terme</span> <span class="kr">else</span> <span class="n">terme</span>
+        <span class="o">|</span> <span class="n">terme</span> <span class="o">-&gt;</span> <span class="n">terme</span>             <span class="o">(</span><span class="n">type</span> <span class="n">d'une</span> <span class="n">fonction</span><span class="o">)</span>
+        <span class="o">|</span> <span class="kr">forall</span> <span class="nv">var</span> <span class="o">:</span> <span class="n">terme</span><span class="o">,</span> <span class="n">terme</span>  <span class="o">(</span><span class="n">type</span> <span class="n">d'une</span> <span class="n">fonction</span> <span class="n">générique</span><span class="o">)</span></code></pre>
+<ul>
+<li><div class="line-block">
+<div class="line">Comme on le verra par la suite, <code class="highlight coq"><span class="n">t1</span> <span class="o">-&gt;</span> <span class="n">t2</span></code> est en fait</div>
+<div class="line">une syntaxe alternative (plus intuitive) de &quot;<code class="highlight coq"><span class="kr">forall</span> <span class="nv">_</span> <span class="o">:</span> <span class="n">t1</span><span class="o">,</span> <span class="n">t2</span></code>&quot;.</div>
+</div>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk23" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk23"><span class="kn">Check</span> id.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id
+     : <span class="kr">forall</span> <span class="nv">T</span> : <span class="kt">Type</span>, T -&gt; T</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></li>
+</ul>
+</section>
+<section id="inference-d-arguments">
+<h3>Inférence d'arguments<a class="self-link" title="link to this section" href="#inference-d-arguments"></a></h3>
+<p>Dans le terme <code class="highlight coq"><span class="n">id</span> <span class="n">bool</span> <span class="n">true</span></code> ci dessus, Coq pourrait deviner
+automatiquement le premier argument <code class="highlight coq"><span class="n">bool</span></code> puisque c'est le type
+du deuxième argument <code class="highlight coq"><span class="n">true</span></code> d'après le type de <code class="highlight coq"><span class="n">id</span></code>. Il est
+effectivement possible d'écrire</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk24" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk24"><span class="kn">Check</span> id _ true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id bool true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><p>Coq remplace automatiquement le <code class="highlight coq"><span class="n">_</span></code> par la seule valeur possible <code class="highlight coq"><span class="n">bool</span></code>.</p>
+<p>On peut ainsi remplacer tout sous terme par un trou <code class="highlight coq"><span class="n">_</span></code> et laisser Coq
+tenter de le remplir. Coq retourne une erreur quand il ne trouve pas
+de solution canonique.</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk25" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk25"><span class="kn">Fail</span> <span class="kn">Definition</span> <span class="nf">id_bool</span> := id bool _.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">The command has indeed failed <span class="kr">with</span> message:
+The following term contains unresolved implicit arguments:
+  (id bool <span class="nl">?x</span>)
+More precisely: 
+- <span class="nl">?x</span>: Cannot infer this placeholder of type <span class="s2">&quot;bool&quot;</span>.</blockquote></div></div></small></span></pre></section>
+<section id="genericite-et-arguments-implicites-i">
+<h3>Généricité et arguments implicites I<a class="self-link" title="link to this section" href="#genericite-et-arguments-implicites-i"></a></h3>
+<p>Les remarques qui suivent ne sont pas &quot;exigibles à l'examen&quot; mais
+permettront d'avoir plus de confort, notamment en TP, en évitant de
+devoir expliciter tous les paramètres de généricité lors de l'appel
+d'une fonction polymorphe.</p>
+<p>Les arguments implicites permettent d'écrire <code class="highlight coq"><span class="n">id</span> <span class="n">true</span></code> au lieu de <code class="highlight coq"><span class="n">id</span> <span class="n">_</span> <span class="n">true</span></code>.
+Redéfinissons la fonction id après activation des arguments implicites</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Set Implicit Arguments</span>. <span class="c">(* au début du fichier en principe *)</span></span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">id&#39;</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) := x.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk26" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk26"><span class="kn">Print</span> id&#39;.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id&#39; = 
+<span class="kr">fun</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) =&gt; x
+     : <span class="kr">forall</span> <span class="nv">T</span> : <span class="kt">Type</span>, T -&gt; T
+
+<span class="kn">Arguments</span> id&#39; [T]%type_scope</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+<span class="c">(* même code que *)</span>
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk27" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk27"><span class="kn">Print</span> id.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id = 
+<span class="kr">fun</span> (<span class="nv">T</span> : <span class="kt">Type</span>) (<span class="nv">x</span> : T) =&gt; x
+     : <span class="kr">forall</span> <span class="nv">T</span> : <span class="kt">Type</span>, T -&gt; T
+
+<span class="kn">Arguments</span> id _%type_scope</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+<span class="c">(* mais *)</span>
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk28" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk28"><span class="kn">About</span> id&#39;.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id&#39; : <span class="kr">forall</span> [T : <span class="kt">Type</span>], T -&gt; T
+
+id&#39; <span class="kr">is</span> not universe polymorphic
+<span class="kn">Arguments</span> id&#39; [T]%type_scope
+id&#39; <span class="kr">is</span> transparent
+Expands to: Constant ilu3_coq_1.id&#39;</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* id&#39; : forall [T : Type], T -&gt; T *)</span></span></pre><p>(<span class="math">\(\leadsto\)</span> noter le [T] au lieu de T)</p>
+<p>L'argument T est implicite : il peut être inféré à partir de l'argument d'après.</p>
+<p>D'où une syntaxe concise à la OCaml :</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk29" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk29"><span class="kn">Check</span> id&#39; true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">id&#39; true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Set Printing All</span>. <span class="c">(* affiche tout, dont les arguments implicites *)</span></span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk2a" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2a"><span class="kn">Check</span> id&#39; true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">@id&#39; bool true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><p>Le <code class="highlight coq"><span class="o">&#64;</span></code> indique que tous les arguments de <code class="highlight coq"><span class="n">id'</span></code> sont explicités.
+Grâce aux arguments implicites, entrer <code class="highlight coq"><span class="n">id'</span> <span class="n">true</span></code> est equivalent à entrer</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk2b" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2b"><span class="kn">Check</span> @id&#39; _ true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">@id&#39; bool true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Unset Printing All</span>.</span></span></pre></section>
+<section id="genericite-et-arguments-implicites-ii">
+<h3>Généricité et arguments implicites II<a class="self-link" title="link to this section" href="#genericite-et-arguments-implicites-ii"></a></h3>
+<p>En OCaml :</p>
+<p><span class="docutils literal">let id x = x;;</span></p>
+<p><span class="docutils literal">id 0;; (* : int = 0 *)</span></p>
+<p><span class="docutils literal">id true;; (* : bool = true *)</span></p>
+<p>En Coq :</p>
+<p><code class="highlight coq"><span class="kn">Set Implicit Arguments</span><span class="o">.</span></code></p>
+<p><code class="highlight coq"><span class="kn">Definition</span> <span class="nf">id</span> <span class="nv">T</span> <span class="o">(</span><span class="nv">x</span><span class="o">:</span><span class="n">T</span><span class="o">)</span> <span class="o">:=</span> <span class="n">x</span><span class="o">.</span></code></p>
+<p><code class="highlight coq"><span class="kn">Check</span> <span class="n">id</span> <span class="mi">0</span><span class="o">.</span> <span class="c">(* id 0 : nat *)</span></code></p>
+<p><code class="highlight coq"><span class="kn">Check</span> <span class="n">id</span> <span class="n">true</span><span class="o">.</span> <span class="c">(* id true : bool *)</span></code></p>
+</section>
+<section id="parametres-de-genericite-un-plus-gros-exemple">
+<h3>Paramètres de généricité : un plus gros exemple<a class="self-link" title="link to this section" href="#parametres-de-genericite-un-plus-gros-exemple"></a></h3>
+<p>En OCaml :</p>
+<p><span class="docutils literal">let comp f g x = g (f <span class="pre">x);;</span></span></p>
+<p><span class="docutils literal">val comp : (’a <span class="pre">-&gt;</span> ’b) <span class="pre">-&gt;</span> (’b <span class="pre">-&gt;</span> ’c) <span class="pre">-&gt;</span> ’a <span class="pre">-&gt;</span> ’c = &lt;fun&gt;</span></p>
+<p><span class="docutils literal">comp (fun x <span class="pre">-&gt;</span> x + 1) (fun x <span class="pre">-&gt;</span> x * 2) 3;;</span></p>
+<p><span class="math">\(\leadsto\)</span> ?</p>
+<p>En Coq :</p>
+<p>Pas de synthèse du nom des paramètres de généricité : il faut
+déclarer ces paramètres de généricité lors de la définition.</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-wsp"><span class="c">(* Set Implicit Arguments. (* déjà fait auparavant *) *)</span>
+
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">comp</span> <span class="nv">T1</span> <span class="nv">T2</span> <span class="nv">T3</span> (<span class="nv">f</span>:T1-&gt;T2) (<span class="nv">g</span>:T2-&gt;T3) (<span class="nv">x</span> : T1) : T3 := g (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">comp_v2</span> <span class="nv">T1</span> <span class="nv">T2</span> <span class="nv">T3</span> (<span class="nv">f</span>:T1-&gt;T2) (<span class="nv">g</span>:T2-&gt;T3) (<span class="nv">x</span> : T1) := g (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">comp_v3</span> <span class="nv">T1</span> <span class="nv">T2</span> <span class="nv">T3</span> (<span class="nv">f</span>:T1-&gt;T2) (<span class="nv">g</span>:T2-&gt;T3) <span class="nv">x</span> := g (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">comp_v4</span> <span class="nv">T1</span> <span class="nv">T2</span> <span class="nv">T3</span> <span class="nv">f</span> (<span class="nv">g</span>:T2-&gt;T3) (<span class="nv">x</span>:T1) := g (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* ou *)</span>
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">comp_v5</span> <span class="nv">T1</span> <span class="nv">T2</span> <span class="nv">T3</span> (<span class="nv">f</span>:T1-&gt;T2) <span class="nv">g</span> (<span class="nv">x</span>:T1) : T3 := g (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk2c" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2c"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> comp (<span class="kr">fun</span> <span class="nv">x</span> =&gt; x + <span class="mi">1</span>) (<span class="kr">fun</span> <span class="nv">x</span> =&gt; x * <span class="mi">2</span>) <span class="mi">3</span>.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= <span class="mi">8</span>
+: nat</blockquote></div></div></small></span></pre></section>
+<section id="exercices">
+<h3>Exercices<a class="self-link" title="link to this section" href="#exercices"></a></h3>
+<ol class="arabic simple">
+<li><p>Ecrire la fonction <span class="docutils literal">mult2</span> retournant le double de son argument.</p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">mult2</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line"><strong>Supposons défini</strong> le prédicat <code class="highlight coq"><span class="n">leq</span> <span class="o">:</span> <span class="n">nat</span> <span class="o">-&gt;</span> <span class="n">nat</span> <span class="o">-&gt;</span> <span class="n">bool</span></code>,
+retournant <code class="highlight coq"><span class="n">true</span></code> si son 1er argument est inférieur à son second.</div>
+<div class="line">Définir la fonction <span class="docutils literal">max</span> retournant le plus grand de ses 2 arguments.</div>
+<div class="line">En déduire la fonction <span class="docutils literal">max3</span> retournant le plus grand de ses 3 arguments.</div>
+<div class="line">Ecrire une variante <span class="docutils literal">max3'</span> où la définition de <span class="docutils literal">max</span> est locale.</div>
+</div>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Parameter</span> <span class="nv">leq</span> : nat -&gt; nat -&gt; bool.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">max</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">max3</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">max3&#39;</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre></li>
+<li><p>Quel est le type de l'expression suivante ?</p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr3</span> := <span class="kr">fun</span> (<span class="nv">T</span>:<span class="kt">Type</span>) (<span class="nv">f</span>:T -&gt; T) <span class="nv">x</span> =&gt; f (f x).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* *)</span></span></pre><ol class="arabic simple" start="4">
+<li><p>Quel est le type de l'expression suivante ? (donner 2 syntaxes équivalentes)</p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr4</span> := <span class="kr">fun</span> (<span class="nv">T</span>:<span class="kt">Type</span>) =&gt; T -&gt; T.</span></span></pre><ol class="arabic simple" start="5">
+<li><p>Quel est le type de l'expression suivante ?</p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr5</span> := <span class="kr">fun</span> (<span class="nv">T</span>:<span class="kt">Type</span>) (<span class="nv">x</span>:T) =&gt; x=x.</span></span></pre><ol class="arabic simple" start="6">
+<li><p>Écrire une fonction de type <code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">a</span></code></p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr6</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><ol class="arabic simple" start="7">
+<li><p>Écrire une fonction de type <code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">b</span></code></p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr7</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><p>8. Écrire une fonction de type
+<code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">c</span></code></p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr8</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><ol class="arabic simple" start="9">
+<li><p>Écrire une fonction de type <code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">)</span></code></p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr9</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><p>10. Écrire une fonction de type
+<code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">c</span></code></p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr10</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><ol class="arabic simple" start="11">
+<li><p>Écrire une fonction de type <code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span></code></p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">expr11</span> := <span class="c">(* todo *)</span><span class="mi">0</span>.</span></span></pre><ol class="arabic simple" start="12">
+<li><p>Peut-on écrire une fonction de type <code class="highlight coq"><span class="kr">forall</span> <span class="nv">a</span> <span class="nv">b</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">,</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span></code> ?</p></li>
+</ol>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-wsp"><span class="c">(* En OCaml :</span>
+
+<span class="c">   let exemple =</span>
+
+<span class="c"> *)</span>
+
+<span class="c">(* En Coq ? *)</span></span></pre></section>
+<section id="retour-sur-et-forall">
+<h3>Retour sur <code class="highlight coq"><span class="o">-&gt;</span></code> et <code class="highlight coq"><span class="kr">forall</span></code><a class="self-link" title="link to this section" href="#retour-sur-et-forall"></a></h3>
+<p><code class="highlight coq"><span class="n">T1</span> <span class="o">-&gt;</span> <span class="n">T2</span></code> correspond :</p>
+<ul class="simple">
+<li><p>au type des fonctions de <code class="highlight coq"><span class="n">T1</span></code> dans <code class="highlight coq"><span class="n">T2</span></code>, c’est-à-dire</p></li>
+<li><p>au type des fonctions qui associent à tout <code class="highlight coq"><span class="n">x</span><span class="o">:</span><span class="n">T1</span></code> un élément de <code class="highlight coq"><span class="n">T2</span></code>,</p></li>
+<li><p>que l’on peut aussi écrire <code class="highlight coq"><span class="kr">forall</span> <span class="o">(</span><span class="nv">x</span> <span class="o">:</span> <span class="n">T1</span><span class="o">),</span> <span class="n">T2</span></code></p></li>
+</ul>
+<p><code class="highlight coq"><span class="kr">forall</span></code> est une notation :</p>
+<ul class="simple">
+<li><p>généralisant <code class="highlight coq"><span class="o">-&gt;</span></code>,</p></li>
+<li><p>utile lorsque le type d’arrivée <code class="highlight coq"><span class="n">T2</span></code> dépend du terme fourni <code class="highlight coq"><span class="n">x</span></code>.</p></li>
+</ul>
+<section id="exemples-de-types-definissables-en-coq">
+<h4>Exemples de types définissables en Coq<a class="self-link" title="link to this section" href="#exemples-de-types-definissables-en-coq"></a></h4>
+<ul class="simple">
+<li><p><code class="highlight coq"><span class="kr">forall</span> <span class="o">(</span><span class="nv">T</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">),</span> <span class="n">T</span> <span class="o">-&gt;</span> <span class="n">T</span></code></p></li>
+<li><p><code class="highlight coq"><span class="kr">forall</span> <span class="o">(</span><span class="nv">p</span> <span class="nv">q</span> <span class="o">:</span> <span class="n">nat</span><span class="o">),</span> <span class="n">q</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="o">-&gt;</span> <span class="n">nat</span></code></p></li>
+<li><p><code class="highlight coq"><span class="kr">forall</span> <span class="o">(</span><span class="nv">b</span> <span class="o">:</span> <span class="n">bool</span><span class="o">),</span> <span class="kr">if</span> <span class="n">b</span> <span class="kr">then</span> <span class="n">nat</span> <span class="kr">else</span> <span class="n">bool</span> <span class="o">*</span> <span class="n">bool</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="la-correspondance-de-curryhoward-double-lecture">
+<h3>La correspondance de Curry–Howard : double lecture<a class="self-link" title="link to this section" href="#la-correspondance-de-curryhoward-double-lecture"></a></h3>
+<table>
+<thead>
+<tr><th class="head"><p>Notation</p></th>
+<th class="head"><p>Lecture fonctionnelle</p></th>
+<th class="head"><p>Lecture logique</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p><code class="highlight coq"><span class="n">x</span> <span class="o">:</span> <span class="n">T</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">x</span></code> a pour type <code class="highlight coq"><span class="n">T</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">x</span></code> &quot;preuve&quot; de <code class="highlight coq"><span class="n">T</span></code></p></td>
+</tr>
+<tr><td><p><em>aucun</em> <code class="highlight coq"><span class="n">x</span><span class="o">:</span><span class="n">T</span></code></p></td>
+<td><p>le type <code class="highlight coq"><span class="n">T</span></code> est vide</p></td>
+<td><p><code class="highlight coq"><span class="n">T</span></code> est insatisfiable</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">P</span> <span class="o">-&gt;</span> <span class="n">Q</span></code></p></td>
+<td><p>type des fonctions de <code class="highlight coq"><span class="n">P</span></code> dans <code class="highlight coq"><span class="n">Q</span></code></p></td>
+<td><p>l'implication logique</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">f</span> <span class="o">:</span> <span class="n">P</span> <span class="o">-&gt;</span> <span class="n">Q</span></code></p></td>
+<td><p>f est une fonction de <code class="highlight coq"><span class="n">P</span></code> dans <code class="highlight coq"><span class="n">Q</span></code></p></td>
+<td><p>f preuve de <span class="docutils literal">P =&gt; Q</span></p></td>
+</tr>
+<tr><td></td>
+<td colspan="2"><p>f transforme une &quot;preuve&quot; de <code class="highlight coq"><span class="n">P</span></code> en une &quot;preuve&quot; de <code class="highlight coq"><span class="n">Q</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="types-inductifs">
+<h3>Types inductifs<a class="self-link" title="link to this section" href="#types-inductifs"></a></h3>
+<p>Définition d’un type inductif paramétré par <span class="docutils literal"><span class="pre">a1,...,am</span></span>.</p>
+<p>En OCaml :</p>
+<pre class="code OCaml literal-block"><code><span class="k">type</span> <span class="o">(</span><span class="k">'</span><span class="n">a1</span><span class="o">,</span> <span class="o">...,</span> <span class="k">'</span><span class="n">am</span><span class="o">)</span> <span class="n">t</span> <span class="o">=</span>     <span class="c">(* m paramètres de généricité *)</span>
+  <span class="o">|</span> <span class="nc">C1</span> <span class="k">of</span> <span class="n">t1_1</span> <span class="o">*</span> <span class="o">...</span> <span class="o">*</span> <span class="n">t1_n1</span> <span class="c">(* constructeur C1 d'arité n1 *)</span>
+  <span class="o">|</span> <span class="o">...</span>
+  <span class="o">|</span> <span class="nc">Ck</span> <span class="k">of</span> <span class="n">tk_1</span> <span class="o">*</span> <span class="o">...</span> <span class="o">*</span> <span class="n">tk_nk</span> <span class="c">(* kième constructeur *)</span></code></pre>
+<p>En Coq :</p>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">t</span> <span class="nv">a1</span> <span class="o">...</span> <span class="n">am</span> <span class="o">:=</span>
+  <span class="o">|</span> <span class="n">C1</span> <span class="o">(</span><span class="n">p1</span> <span class="o">:</span> <span class="n">t1_1</span><span class="o">)</span> <span class="o">...</span> <span class="o">(</span><span class="n">pn1</span> <span class="o">:</span> <span class="n">t1_n1</span><span class="o">)</span>
+  <span class="o">|</span> <span class="o">...</span>
+  <span class="o">|</span> <span class="n">Ck</span> <span class="o">(</span><span class="n">p1</span> <span class="o">:</span> <span class="n">tk_1</span><span class="o">)</span> <span class="o">...</span> <span class="o">(</span><span class="n">pnk</span> <span class="o">:</span> <span class="n">tk_nk</span><span class="o">).</span> <span class="c">(* ne pas oublier le point *)</span></code></pre>
+</section>
+<section id="analyse-par-cas">
+<h3>Analyse par cas<a class="self-link" title="link to this section" href="#analyse-par-cas"></a></h3>
+<p>En OCaml :</p>
+<pre class="code OCaml literal-block"><code><span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+<span class="o">|</span> <span class="nc">C1</span> <span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xn1</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">...</span>
+<span class="o">|</span> <span class="o">...</span>
+<span class="o">|</span> <span class="nc">Ck</span> <span class="o">(</span><span class="n">x1</span><span class="o">,</span> <span class="o">...,</span> <span class="n">xnk</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">...</span></code></pre>
+<p>En Coq :</p>
+<pre class="code Coq literal-block"><code><span class="kr">match</span> <span class="n">x</span> <span class="kr">with</span>
+<span class="o">|</span> <span class="n">C1</span> <span class="n">x1</span> <span class="o">...</span> <span class="n">xn1</span> <span class="o">=&gt;</span> <span class="o">...</span>
+<span class="o">|</span> <span class="o">...</span>
+<span class="o">|</span> <span class="n">Ck</span> <span class="n">x1</span> <span class="o">...</span> <span class="n">xnk</span> <span class="o">=&gt;</span> <span class="o">...</span>
+<span class="kr">end</span></code></pre>
+<p>Différences :</p>
+<ul class="simple">
+<li><p>Les constructeurs sont typiquement &quot;curryfiés&quot; en Coq.</p></li>
+<li><p>Les <code class="highlight coq"><span class="o">-&gt;</span></code> sont remplacées par <code class="highlight coq"><span class="o">=&gt;</span></code></p></li>
+<li><p>Il y a un <code class="highlight coq"><span class="kr">end</span></code> en plus (pratique)</p></li>
+<li><p>Sinon c'est la même syntaxe :-)</p></li>
+</ul>
+</section>
+<section id="exemples-de-types-inductifs">
+<h3>Exemples de types inductifs<a class="self-link" title="link to this section" href="#exemples-de-types-inductifs"></a></h3>
+<p>Type de données prédéfini dans Coq :</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk2d" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2d"><span class="kn">Print</span> bool.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kn">Inductive</span> <span class="nf">bool</span> : <span class="kt">Set</span> :=  true : bool | false : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Inductive</span> <span class="nf">entier_nat</span> := Zero | Succ (p : entier_nat).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Inductive</span> <span class="nf">liste</span> <span class="nv">T</span> := Vide | Cons (x : T) (l : liste T).</span></span></pre><p>Eléments d’un type inductif :</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk2e" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2e"><span class="kn">Check</span> true.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">true
+     : bool</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk2f" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk2f"><span class="kn">Check</span> (Succ (Succ Zero)).</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">Succ (Succ Zero)
+     : entier_nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Definition</span> <span class="nf">liste1</span> := @Cons entier_nat (Succ Zero) (Vide entier_nat).</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk30" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk30"><span class="kn">Print</span> liste1.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">liste1 = 
+Cons (Succ Zero) (Vide entier_nat)
+     : liste entier_nat</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></section>
+<section id="fonctions-recursives">
+<h3>Fonctions récursives<a class="self-link" title="link to this section" href="#fonctions-recursives"></a></h3>
+<div class="line-block">
+<div class="line"><strong>Obligation de terminaison :</strong></div>
+<div class="line">un des arguments doit être <em>structurellement décroissant</em></div>
+<div class="line">(appels récursifs sur un sous-terme de cet argument)</div>
+</div>
+<div class="line-block">
+<div class="line">Comme déjà dit en introduction :</div>
+<div class="line">il est impossible de définir en Coq une fonction récursive qui ne termine pas.</div>
+</div>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Fixpoint</span> <span class="nf">add</span> <span class="nv">n</span> <span class="nv">m</span> :=
+  <span class="kr">match</span> n <span class="kr">with</span>
+  | Zero =&gt; m
+  | Succ p =&gt; Succ (add p m)
+  <span class="kr">end</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Fixpoint</span> <span class="nf">long</span> <span class="nv">T</span> (<span class="nv">l</span> : liste T) :=
+  <span class="kr">match</span> l <span class="kr">with</span>
+  | Vide _ =&gt; Zero
+  | Cons x r =&gt; Succ (long r)
+  <span class="kr">end</span>.</span></span></pre><p>Est-ce normal d'écrire <code class="highlight coq"><span class="n">Cons</span> <span class="n">x</span> <span class="n">r</span> <span class="o">=&gt;</span> <span class="n">Succ</span> <span class="o">(</span><span class="n">long</span> <span class="n">r</span><span class="o">)</span></code> ?</p>
+<p>Précisons :</p>
+<ul class="simple">
+<li><p>Le constructeur <code class="highlight coq"><span class="n">Cons</span></code> a trois arguments,</p></li>
+<li><p>La fonction <code class="highlight coq"><span class="n">long</span></code> a 2 arguments...</p></li>
+<li><p>Mais on avait activé les arguments implicites : <code class="highlight coq"><span class="kn">Set Implicit Arguments</span></code>.</p></li>
+<li><p>On pourrait néanmoins écrire en étant pleinement explicite :</p></li>
+</ul>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Fixpoint</span> <span class="nf">long_v2</span> <span class="nv">T</span> (<span class="nv">l</span> : liste T) :=
+  <span class="kr">match</span> l <span class="kr">with</span>
+  | Vide _ =&gt; Zero
+  | @Cons _ x r =&gt; Succ (@long_v2 T r)
+  <span class="kr">end</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk31" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk31"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> long_v2 liste1.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= Succ Zero
+: entier_nat</blockquote></div></div></small></span></pre><p><strong>Remarque:</strong>
+Coq n'est pas limité aux fonctions primitives récursives. Par exemple, la <a class="reference external" href="https://mathworld.wolfram.com/AckermannFunction.html">fonction d'Ackermann</a> peut être définie comme ci-dessous et il serait possible de démontrer qu'elle est identique à la définition usuelle:</p>
+<img alt="https://mathworld.wolfram.com/images/equations/AckermannFunction/NumberedEquation1.svg" src="https://mathworld.wolfram.com/images/equations/AckermannFunction/NumberedEquation1.svg" />
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Fixpoint</span> <span class="nf">pow</span> (<span class="nv">f</span>:nat-&gt;nat) <span class="nv">n</span> <span class="nv">a</span> :=
+  <span class="kr">match</span> n <span class="kr">with</span>
+    <span class="mi">0</span> =&gt; a
+  | S p =&gt; pow f p (f a)
+  <span class="kr">end</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Fixpoint</span> <span class="nf">ack</span> <span class="nv">a</span> <span class="nv">b</span> : nat :=
+<span class="kr">match</span> a <span class="kr">with</span>
+| <span class="mi">0</span> =&gt; S b
+| S a =&gt; pow (ack a) (S b) <span class="mi">1</span>
+<span class="kr">end</span>.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+</span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-1-v-chk32" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk32"><span class="kn">Eval</span> <span class="nb">compute</span> <span class="kr">in</span> (ack <span class="mi">3</span> <span class="mi">4</span>).</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">= <span class="mi">125</span>
+: nat</blockquote></div></div></small><span class="alectryon-wsp">            </span></span></pre></section>
+<section id="schemas-inductifs">
+<h3>Schémas inductifs<a class="self-link" title="link to this section" href="#schemas-inductifs"></a></h3>
+<p>Preuve par récurence sur les entiers naturels (construits avec Zero, Succ)</p>
+<p>Est-ce que la fonction suivante (ou son type) vous rappellent quelque chose ?</p>
+<pre class="code Coq literal-block"><code><span class="kn">Fixpoint</span> <span class="nf">entier_nat_ind</span> <span class="o">(</span><span class="nv">P</span> <span class="o">:</span> <span class="n">entier_nat</span> <span class="o">-&gt;</span> <span class="kt">Prop</span><span class="o">)</span>
+<span class="o">(</span><span class="nv">fZero</span> <span class="o">:</span> <span class="n">P</span> <span class="n">Zero</span><span class="o">)</span> <span class="o">(</span><span class="nv">fSucc</span> <span class="o">:</span> <span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">,</span> <span class="n">P</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">P</span> <span class="o">(</span><span class="n">Succ</span> <span class="n">n</span><span class="o">))</span>
+<span class="o">(</span><span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="n">n</span> <span class="o">:=</span>
+  <span class="kr">match</span> <span class="n">n</span> <span class="kr">with</span>
+  <span class="o">|</span> <span class="n">Zero</span> <span class="o">=&gt;</span> <span class="n">fZero</span>
+  <span class="o">|</span> <span class="n">Succ</span> <span class="n">n</span> <span class="o">=&gt;</span> <span class="n">fSucc</span> <span class="n">n</span> <span class="o">(</span><span class="n">entier_nat_ind</span> <span class="n">P</span> <span class="n">fZero</span> <span class="n">fSucc</span> <span class="n">n</span><span class="o">)</span>
+  <span class="kr">end</span><span class="o">.</span></code></pre>
+<p>qui a pour type :</p>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk33" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk33"><span class="kn">Check</span> entier_nat_ind.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">entier_nat_ind
+     : <span class="kr">forall</span> <span class="nv">P</span> : entier_nat -&gt; <span class="kt">Prop</span>,
+       P Zero -&gt;
+       (<span class="kr">forall</span> <span class="nv">p</span> : entier_nat, P p -&gt; P (Succ p)) -&gt;
+       <span class="kr">forall</span> <span class="nv">e</span> : entier_nat, P e</blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><p>Il s'agit du &quot;Principe d’induction&quot; pour les entiers naturels, généré
+automatiquement par Coq.</p>
+<p>(Et il se trouve que le &quot;code&quot; qui implémente ce principe correspond à
+l'itérateur le plus général sur le type <code class="highlight coq"><span class="n">entier_nat</span></code> :)</p>
+<p>Le type en question est donc :</p>
+<pre class="code Coq literal-block"><code><span class="kr">forall</span> <span class="nv">P</span> <span class="o">:</span> <span class="n">entier_nat</span> <span class="o">-&gt;</span> <span class="kt">Prop</span><span class="o">,</span> <span class="n">P</span> <span class="n">Zero</span> <span class="o">-&gt;</span>
+  <span class="o">(</span><span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">,</span> <span class="n">P</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">P</span> <span class="o">(</span><span class="n">Succ</span> <span class="n">n</span><span class="o">))</span>
+<span class="o">-&gt;</span> <span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">,</span> <span class="n">P</span> <span class="n">n</span><span class="o">.</span></code></pre>
+</section>
+<section id="un-peu-dintuition-sur-ce-principe-dinduction">
+<h3>Un peu d’intuition sur ce principe d’induction<a class="self-link" title="link to this section" href="#un-peu-dintuition-sur-ce-principe-dinduction"></a></h3>
+<ul class="simple">
+<li><p>Hypothèses :</p>
+<ul>
+<li><p>pZero : preuve de P Zero</p></li>
+<li><p>pSucc : preuve de <span class="math">\(\forall n,\ P n \implies P (n+1)\)</span></p></li>
+</ul>
+</li>
+<li><p>Conclusion :</p>
+<ul>
+<li><p><span class="math">\(\forall n,\ P n\)</span></p></li>
+</ul>
+</li>
+</ul>
+<p>On peut l'écrire sous la forme d'une &quot;Règle d'inférence&quot; :</p>
+<pre class="code Coq literal-block"><code><span class="o">(</span><span class="n">pZero</span> <span class="o">:</span> <span class="n">P</span> <span class="n">Zero</span><span class="o">)</span>  <span class="o">(</span><span class="n">pSucc</span> <span class="o">:</span> <span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">,</span> <span class="n">P</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">P</span> <span class="o">(</span><span class="n">Succ</span> <span class="n">n</span><span class="o">))</span>
+<span class="o">--------------------------------------------------------------------</span>
+     <span class="n">entier_nat_ind</span> <span class="n">P</span> <span class="n">pZero</span> <span class="n">pSucc</span> <span class="o">:</span>  <span class="kr">forall</span> <span class="nv">n</span> <span class="o">:</span> <span class="n">entier_nat</span><span class="o">,</span> <span class="n">P</span> <span class="n">n</span></code></pre>
+</section>
+<section id="l-effet-domino">
+<h3>L'effet domino<a class="self-link" title="link to this section" href="#l-effet-domino"></a></h3>
+<p>Une petite image vaut mieux qu'un long discours :</p>
+<a class="reference external image-reference" href="https://commons.wikimedia.org/wiki/File:Dominoeffect.png"><img alt="CC BY-SA 3.0" src="https://upload.wikimedia.org/wikipedia/commons/9/92/Dominoeffect.png" /></a>
+</section>
+<section id="le-type-inductif-des-listes-predefini">
+<h3>Le type inductif des listes (prédéfini)<a class="self-link" title="link to this section" href="#le-type-inductif-des-listes-predefini"></a></h3>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Require Import</span> List.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Import</span> ListNotations.</span><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp"><span class="c">(* Set Implicit Arguments. (* déjà fait auparavant *) *)</span>
+
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk34" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk34"><span class="kn">Check</span> list.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message">list
+     : <span class="kt">Type</span> -&gt; <span class="kt">Type</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span><span class="alectryon-wsp">
+
+</span><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk35" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk35"><span class="kn">Print</span> list.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kn">Inductive</span> <span class="nf">list</span> (<span class="nv">A</span> : <span class="kt">Type</span>) : <span class="kt">Type</span> :=
+    nil : list A | cons : A -&gt; list A -&gt; list A
+
+<span class="kn">Arguments</span> list _%type_scope
+<span class="kn">Arguments</span> nil {A}%type_scope
+<span class="kn">Arguments</span> cons {A}%type_scope a l%list_scope : <span class="nb">rename</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre><pre class="code Coq literal-block"><code><span class="kn">Fixpoint</span> <span class="nf">list_ind</span> <span class="nv">T</span> <span class="o">(</span><span class="nv">P</span> <span class="o">:</span> <span class="n">list</span> <span class="n">T</span> <span class="o">-&gt;</span> <span class="kt">Prop</span><span class="o">)</span>
+<span class="o">(</span><span class="nv">pNil</span> <span class="o">:</span> <span class="n">P</span> <span class="n">nil</span><span class="o">)</span> <span class="o">(</span><span class="nv">pCons</span> <span class="o">:</span> <span class="kr">forall</span> <span class="nv">x</span> <span class="nv">l</span><span class="o">,</span> <span class="n">P</span> <span class="n">l</span> <span class="o">-&gt;</span> <span class="n">P</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">l</span><span class="o">))</span> <span class="nv">l</span>
+<span class="o">:</span> <span class="n">P</span> <span class="n">l</span> <span class="o">:=</span>
+  <span class="kr">match</span> <span class="n">l</span> <span class="kr">with</span>
+  <span class="o">|</span> <span class="o">[]</span> <span class="o">=&gt;</span> <span class="n">pNil</span>
+  <span class="o">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">r</span> <span class="o">=&gt;</span> <span class="n">pCons</span> <span class="n">x</span> <span class="n">r</span> <span class="o">(&#64;</span><span class="n">list_ind</span> <span class="n">T</span> <span class="n">P</span> <span class="n">pNil</span> <span class="n">pCons</span> <span class="n">r</span><span class="o">)</span>
+  <span class="kr">end</span><span class="o">.</span></code></pre>
+<p>Généré automatiquement !</p>
+<p>Permet la &quot;preuve par induction&quot; sur les listes (construites avec <code class="highlight coq"><span class="o">[]</span></code> et <code class="highlight coq"><span class="o">::</span></code>)</p>
+</section>
+<section id="regle-d-inference-du-schema-inductif-des-listes">
+<h3>Règle d'inférence du schéma inductif des listes<a class="self-link" title="link to this section" href="#regle-d-inference-du-schema-inductif-des-listes"></a></h3>
+<pre class="code Coq literal-block"><code><span class="o">(</span><span class="n">pNil</span> <span class="o">:</span> <span class="n">P</span> <span class="o">[])</span>  <span class="o">(</span><span class="n">pCons</span> <span class="o">:</span> <span class="kr">forall</span> <span class="nv">x</span> <span class="nv">l</span><span class="o">,</span> <span class="n">P</span> <span class="n">l</span> <span class="o">-&gt;</span> <span class="n">P</span> <span class="o">(</span><span class="n">x</span> <span class="o">::</span> <span class="n">l</span><span class="o">))</span>
+<span class="o">------------------------------------------------------</span>
+        <span class="n">list_ind</span> <span class="n">P</span> <span class="n">pNil</span> <span class="n">pCons</span> <span class="o">:</span>  <span class="kr">forall</span> <span class="nv">l</span><span class="o">,</span> <span class="n">P</span> <span class="n">l</span></code></pre>
+<p>Ici, on a omis les types implicites (le param. de généricité T) par simplicité.</p>
+</section>
+<section id="correspondance-entre-les-types-et-les-formules-logiques">
+<h3>Correspondance entre les types et les formules logiques<a class="self-link" title="link to this section" href="#correspondance-entre-les-types-et-les-formules-logiques"></a></h3>
+<section id="la-correspondance-de-curryhoward-double-lecture-1">
+<h4>La correspondance de Curry–Howard : double lecture<a class="self-link" title="link to this section" href="#la-correspondance-de-curryhoward-double-lecture-1"></a></h4>
+<table>
+<thead>
+<tr><th class="head"><p>Notation</p></th>
+<th class="head"><p>Lecture fonctionnelle</p></th>
+<th class="head"><p>Lecture logique</p></th>
+</tr>
+</thead>
+<tbody>
+<tr><td><p><code class="highlight coq"><span class="n">x</span> <span class="o">:</span> <span class="n">T</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">x</span></code> a pour type <code class="highlight coq"><span class="n">T</span></code></p></td>
+<td><p><code class="highlight coq"><span class="n">x</span></code> &quot;preuve&quot; de <code class="highlight coq"><span class="n">T</span></code></p></td>
+</tr>
+<tr><td><p><em>aucun</em> <code class="highlight coq"><span class="n">x</span><span class="o">:</span><span class="n">T</span></code></p></td>
+<td><p>le type <code class="highlight coq"><span class="n">T</span></code> est vide</p></td>
+<td><p><code class="highlight coq"><span class="n">T</span></code> est insatisfiable</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">P</span> <span class="o">-&gt;</span> <span class="n">Q</span></code></p></td>
+<td><p>type des fonctions de P dans Q</p></td>
+<td><p>l'implication logique</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="n">f</span> <span class="o">:</span> <span class="n">P</span> <span class="o">-&gt;</span> <span class="n">Q</span></code></p></td>
+<td><p>f est une fonction de P dans Q</p></td>
+<td><p>f preuve de <span class="docutils literal">P =&gt; Q</span></p></td>
+</tr>
+<tr><td></td>
+<td colspan="2"><p>f transforme une &quot;preuve&quot; de P en une &quot;preuve&quot; de Q</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="kr">forall</span> <span class="nv">T</span><span class="o">,</span> <span class="n">T</span> <span class="o">-&gt;</span> <span class="n">T</span></code></p></td>
+<td><p>type générique de l'identité</p></td>
+<td><p>exemple de tautologie</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="kr">forall</span> <span class="nv">n</span><span class="o">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">n</span></code></p></td>
+<td><p>fonction associant à chaque
+entier une preuve</p></td>
+<td><p>quantification
+universelle</p></td>
+</tr>
+<tr><td><p><code class="highlight coq"><span class="kr">forall</span> <span class="nv">x</span> <span class="o">:</span> <span class="n">X</span><span class="o">,</span> <span class="n">P</span> <span class="n">x</span></code></p></td>
+<td><p>fonction dont le type
+d'arrivée dépend de l'argument</p></td>
+<td><p>∀x∈X, P x</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">Remarque :</div>
+<div class="line">en Coq et contrairement à la &quot;théorie des ensembles&quot;,</div>
+<div class="line">toutes les variables quantifiées sont associées à un type (qui peut
+cependant être inféré :)</div>
+</div>
+<blockquote>
+<pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><input checked="checked" class="alectryon-toggle" id="ilu3-coq-1-v-chk36" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-1-v-chk36"><span class="kn">Check</span> <span class="kr">forall</span> <span class="nv">n</span>, n + <span class="mi">1</span> &gt; n.</label><small class="alectryon-output"><div><div class="alectryon-messages"><blockquote class="alectryon-message"><span class="kr">forall</span> <span class="nv">n</span> : nat, n + <span class="mi">1</span> &gt; n
+     : <span class="kt">Prop</span></blockquote></div></div></small><span class="alectryon-wsp">
+</span></span></pre></blockquote>
+</section>
+</section>
+<section id="exemple-de-types-inductifs-propositions-logiques">
+<h3>Exemple de types inductifs : propositions logiques<a class="self-link" title="link to this section" href="#exemple-de-types-inductifs-propositions-logiques"></a></h3>
+<section id="la-conjonction">
+<h4>La Conjonction<a class="self-link" title="link to this section" href="#la-conjonction"></a></h4>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">and</span> <span class="o">(</span><span class="nv">P</span> <span class="nv">Q</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">:</span> <span class="kt">Prop</span> <span class="o">:=</span>
+  <span class="n">Conj</span> <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">(</span><span class="n">q</span> <span class="o">:</span> <span class="n">Q</span><span class="o">).</span>
+
+<span class="o">--&gt;</span>
+
+  <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span>  <span class="o">(</span><span class="n">q</span> <span class="o">:</span> <span class="n">Q</span><span class="o">)</span>
+<span class="o">--------------------</span>
+ <span class="n">Conj</span> <span class="n">p</span> <span class="n">q</span> <span class="o">:</span>  <span class="n">P</span> <span class="o">/\</span> <span class="n">Q</span></code></pre>
+</section>
+<section id="la-disjonction">
+<h4>La Disjonction<a class="self-link" title="link to this section" href="#la-disjonction"></a></h4>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">or</span> <span class="o">(</span><span class="nv">P</span> <span class="nv">Q</span><span class="o">:</span> <span class="kt">Prop</span><span class="o">):</span> <span class="kt">Prop</span> <span class="o">:=</span>
+  <span class="o">|</span> <span class="n">Or1</span> <span class="o">(</span><span class="n">p</span><span class="o">:</span> <span class="n">P</span><span class="o">)</span>
+  <span class="o">|</span> <span class="n">Or2</span> <span class="o">(</span><span class="n">q</span><span class="o">:</span> <span class="n">Q</span><span class="o">).</span>
+
+<span class="o">--&gt;</span>
+
+      <span class="n">p</span> <span class="o">:</span> <span class="n">P</span>              <span class="n">q</span> <span class="o">:</span> <span class="n">Q</span>
+<span class="o">-----------------</span>  <span class="o">-----------------</span>
+ <span class="n">Or1</span> <span class="n">p</span> <span class="o">:</span>  <span class="n">P</span> <span class="o">\/</span> <span class="n">Q</span>    <span class="n">Or2</span> <span class="n">q</span> <span class="o">:</span>  <span class="n">P</span> <span class="o">\/</span> <span class="n">Q</span></code></pre>
+</section>
+<section id="la-proposition-true">
+<h4>La proposition True<a class="self-link" title="link to this section" href="#la-proposition-true"></a></h4>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">True</span> <span class="o">:</span> <span class="kt">Prop</span> <span class="o">:=</span> <span class="n">I</span><span class="o">.</span>  <span class="o">--&gt;</span>  <span class="o">----------</span>
+                                   <span class="n">I</span> <span class="o">:</span> <span class="kt">True</span></code></pre>
+</section>
+<section id="la-proposition-false">
+<h4>La proposition False<a class="self-link" title="link to this section" href="#la-proposition-false"></a></h4>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">False</span> <span class="o">:</span> <span class="kt">Prop</span> <span class="o">:=</span> <span class="o">.</span>  <span class="o">--&gt;</span>  <span class="n">pas</span> <span class="n">de</span> <span class="n">preuve</span> <span class="n">de</span> <span class="o">`</span><span class="kt">False</span><span class="o">`</span> <span class="o">!</span></code></pre>
+</section>
+<section id="et-la-quantification-existentielle">
+<h4>Et la quantification existentielle ?<a class="self-link" title="link to this section" href="#et-la-quantification-existentielle"></a></h4>
+<pre class="code Coq literal-block"><code><span class="kn">Inductive</span> <span class="nf">ex</span> <span class="nv">T</span> <span class="o">(</span><span class="nv">P</span><span class="o">:</span> <span class="n">T</span> <span class="o">-&gt;</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">:=</span>
+  <span class="n">ex_intro</span> <span class="o">(</span><span class="n">t</span><span class="o">:</span> <span class="n">T</span><span class="o">)</span> <span class="o">(</span><span class="n">p</span><span class="o">:</span> <span class="n">P</span> <span class="n">t</span><span class="o">).</span>
+
+<span class="o">--&gt;</span>
+
+          <span class="o">(</span><span class="n">t</span> <span class="o">:</span> <span class="n">T</span><span class="o">)</span>  <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">P</span> <span class="n">t</span><span class="o">)</span>
+<span class="o">----------------------------------------</span>
+ <span class="o">&#64;</span><span class="n">ex_intro</span> <span class="n">T</span> <span class="n">P</span> <span class="n">t</span> <span class="n">p</span> <span class="o">:</span>  <span class="kr">exists</span> <span class="nv">x</span> <span class="o">:</span> <span class="n">T</span><span class="o">,</span> <span class="n">P</span> <span class="n">x</span></code></pre>
+</section>
+</section>
+<section id="a-suivre-au-prochain-cours">
+<h3>À suivre au prochain cours<a class="self-link" title="link to this section" href="#a-suivre-au-prochain-cours"></a></h3>
+<ul>
+<li><p>Retour sur la correspondance de Curry-Howard</p></li>
+<li><div class="line-block">
+<div class="line">Présentation des &quot;tactiques Coq&quot;</div>
+<div class="line">pour construire une preuve interactivement/semi-automatiquement !</div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</div>
+</main>
+</div></body>
+</html>
