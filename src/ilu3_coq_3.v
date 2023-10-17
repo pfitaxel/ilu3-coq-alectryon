@@ -1,14 +1,14 @@
 (*|
-===============================================
-TAPFA - Partie Coq - Modules et Types Abstraits
-===============================================
+==============================================
+ILU3 - Partie Coq - Modules et Types Abstraits
+==============================================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
 :Date:    L3 Info, Semestre 6, Année 2021-2022
 
 Supports de ce cours :
 
--  https://pfitaxel.github.io/tapfa-coq-alectryon/
+-  https://pfitaxel.github.io/ilu3-coq-alectryon/
 
 Modules en Coq et application aux TAD
 =====================================

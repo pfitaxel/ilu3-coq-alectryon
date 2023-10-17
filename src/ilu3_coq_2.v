@@ -1,14 +1,14 @@
 (*|
-====================================
-TAPFA - Partie Coq - Preuve assistée
-====================================
+===================================
+ILU3 - Partie Coq - Preuve assistée
+===================================
 
-:Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
-:Date:    L3 Info, Semestre 6, Année 2021-2022
+:Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel (resp. UE), Pierre Roux
+:Date:    L3 Info, Année 2023-2024
 
 Supports de ce cours :
 
--  https://pfitaxel.github.io/tapfa-coq-alectryon/
+-  https://pfitaxel.github.io/ilu3-coq-alectryon/
 
 Principe
 ========

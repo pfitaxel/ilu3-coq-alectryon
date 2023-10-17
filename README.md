@@ -1,15 +1,15 @@
-# tapfa-coq-alectryon
+# ilu3-coq-alectryon
 
 ## Liens directs
 
-* <https://pfitaxel.github.io/tapfa-coq-alectryon> (→ supports `.v` et `.html`)
+* <https://pfitaxel.github.io/ilu3-coq-alectryon> (→ supports `.v` et `.html`)
 * <https://github.com/erikmd/tapfa-init.el> (→ tuto pour installer opam+Coq+PG)
 
 ## Méta-données
 
 * cours de [Coq](https://coq.inria.fr)
 * (converti en HTML par [Alectryon](https://github.com/cpitclaudel/alectryon) et [docker-coq-action](https://github.com/coq-community/docker-coq-action))
-* pour l'UE *Types Abstraits et Programmation Fonctionnelle Avancée* (TAPFA)
+* pour l'UE ILU3
 * à l'[Université Toulouse III - Paul Sabatier](https://www.univ-tlse3.fr/)
 
 ## Auteurs

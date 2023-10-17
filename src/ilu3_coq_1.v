@@ -1,14 +1,14 @@
 (*|
-==================
-TAPFA - Partie Coq
-==================
+=================
+ILU3 - Partie Coq
+=================
 
-:Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
+:Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel (resp. UE), Pierre Roux
 :Date:    L3 Info, Semestre 6, Année 2021-2022
 
 Supports de ce cours :
 
--  https://pfitaxel.github.io/tapfa-coq-alectryon/
+-  https://pfitaxel.github.io/ilu3-coq-alectryon/
 
 Aperçu des fonctionnalités de Coq
 =================================
@@ -115,7 +115,7 @@ Tutoriel d’installation
 
   `<https://github.com/erikmd/tapfa-init.el>`_
 
--  à installer avant le 1er TP TAPFA-Coq
+-  à installer avant le 1er TP ILU3-Coq
 
 -  avant cela, jsCoq peut être utilisé dans votre navigateur :
 
