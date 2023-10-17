@@ -4,7 +4,7 @@ ILU3 - Partie Coq
 =================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel (resp. UE), Pierre Roux
-:Date:    L3 Info, Semestre 6, Année 2021-2022
+:Date:    L3 Info, Semestre 6, Année 2023-2024
 
 Supports de ce cours :
 
@@ -23,8 +23,7 @@ Présentation du logiciel Coq
    :target: https://coq.inria.fr
 
 -  Initié par Thierry Coquand et Gérard Huet, et développé par Inria
-   depuis 1984 (la dernière version stable étant, lors de l'écriture de
-   ce document, Coq 8.15.0).
+   depuis 1984, la dernière version stable étant :
 
 .. image:: https://img.shields.io/docker/v/coqorg/coq/latest
    :alt: coq latest version
@@ -101,12 +100,12 @@ Rappel : installation de l’environnement de TP
 Environnement recommandé
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Coq 8.15 + Emacs + ProofGeneral + Company-Coq
-   [cf. `tutoriel <https://github.com/erikmd/tapfa-init.el>`_]
+-  Coq + Emacs + ProofGeneral + Company-Coq
+   (cf. `tutoriel <https://github.com/erikmd/tapfa-init.el>`_)
 
--  Carte de référence / raccourcis clavier [cf. Moodle]
+-  Carte de référence / raccourcis clavier (cf. Moodle)
 
--  Dictionnaire OCaml/Coq [cf. Moodle ; autorisé à l'examen a priori]
+-  Dictionnaire OCaml/Coq (cf. Moodle ; autorisé à l'examen a priori)
 
 Tutoriel d’installation
 ~~~~~~~~~~~~~~~~~~~~~~~
