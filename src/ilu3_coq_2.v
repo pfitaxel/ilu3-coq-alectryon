@@ -427,12 +427,11 @@ Premier lemme – preuve par induction (version Coq)
 Lemma app_nil : forall (T : Type) (l : list T), l = l ++ [].
 Proof.
 induction l.
-{ (* accolades conseillées pour délimiter les preuves du sous but *)
-  simpl.
-  reflexivity. }
-simpl.
-rewrite <- IHl. (* utilise l’hypothèse d’induction *)
-reflexivity.
+- simpl.
+  reflexivity.
+- simpl.
+  rewrite <- IHl. (* utilise l’hypothèse d’induction *)
+  reflexivity.
 Qed.
 (*|
 
