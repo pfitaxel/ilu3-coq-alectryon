@@ -76,20 +76,18 @@ Définition des identificateurs déclarés dans la spécification
 
 Implantations possibles du monoide :
 
+-  listes avec concaténation
+
 -  entiers avec :math:`0` et :math:`+`
 
 -  entiers avec :math:`1` et :math:`*`
-
--  listes avec concaténation
 
 -  type singleton
 
 -  …
 
-2. Modules réalisant une spécification
---------------------------------------
-
 Exemple : monoide des listes avec concaténation
+-----------------------------------------------
 
 .. coq::
 |*)
@@ -112,6 +110,11 @@ Module MonoList <: Monoide. (* vérification sans masquage *)
   Proof. induction x; auto. simpl. rewrite IHx. reflexivity. Qed.
 End MonoList.
 (*|
+
+**Exercice :** définir un module `MonoAdd` implémentant
+la signature de Monoide pour les entiers munis de l'addition,
+et un module `MonoMul` implémentant cette même signature pour les entiers
+munis de la multiplication.
 
 3. Utilisation indépendante de l’implantation (foncteur)
 --------------------------------------------------------
