@@ -31,11 +31,16 @@ rewrite app_assoc.
 reflexivity.
 Qed.
 
-Exercice bonus
+Exercices bonus
 --------------
 
-Définir la version récursive terminale de `rev`, et prouver en Coq
-que les deux versions sont équivalentes.
+- Définir la version récursive terminale de `rev`, et prouver en Coq
+  que les deux versions sont équivalentes.
+
+- Définir les versions directe et récursive terminale de `fact` et prouver en Coq leur équivalence.
+
+- Définir les versions directe et récursive terminale de `pow n f` calculant n compositions de f et prouver en Coq leur équivalence.
+
 
 Modules en Coq et application aux TAD
 =====================================
