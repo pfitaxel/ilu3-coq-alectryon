@@ -267,3 +267,18 @@ Module Pile_QListe <: Pile.
   intros e; rewrite <-(IHp e) at 2; auto.
   Qed.
 End Pile_QListe.
+(*|
+
+Pour aller plus loin
+--------------------
+
+Pour rappel, il est important d'avoir terminé chaque TP avant d'aborder le suivant.
+
+Si vous voulez réviser ou approfondir les notions vues en CTD et TP Coq,
+ou faire d'autres exercices pour vous entraîner,
+voici 3 ressources supplémentaires, classées par ordre croissant de longueur :
+
+- `<https://rocq-prover.org/docs/tour-of-rocq>`_
+- `<https://learnxinyminutes.com/coq/>`_
+- `<https://cel.hal.science/inria-00001173>`_ (Coq in a Hurry, avec des exercices)
+|*)
