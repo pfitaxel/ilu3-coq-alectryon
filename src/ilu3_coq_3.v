@@ -10,6 +10,33 @@ Supports de ce cours :
 
 -  https://pfitaxel.github.io/ilu3-coq-alectryon/
 
+Elements de correction du dernier CTD
+=====================================
+
+Lemma app_assoc :
+  forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.
+Proof.
+induction l1; simpl; intros; auto.
+rewrite IHl1.
+reflexivity.
+Qed.
+
+Lemma rev_app_distr :
+   forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.
+Proof.
+induction l1; simpl; intros.
+apply app_nil.
+rewrite IHl1.
+rewrite app_assoc.
+reflexivity.
+Qed.
+
+Exercice bonus
+--------------
+
+Définir la version récursive terminale de `rev`, et prouver en Coq
+que les deux versions sont équivalentes.
+
 Modules en Coq et application aux TAD
 =====================================
 
