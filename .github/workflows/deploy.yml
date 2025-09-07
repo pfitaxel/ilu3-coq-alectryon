@@ -24,18 +24,15 @@ jobs:
             startGroup 'Print opam config'
               opam config list; opam repo list; opam list
             endGroup
-            startGroup 'Install Alectryon'
-              sudo apt-get update -y -q
-              sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-                python3-pip
-              python3 -m venv "$PWD"
-              source "$PWD/bin/activate"
-              python3 -m pip install --upgrade alectryon
-            endGroup
             startGroup 'Workaround permissions issue'
               sudo chown -R coq:coq .
               # the container user has UID=GID=1000,
               # while the GHA workdir has (UID=1001, GID=116).
+            endGroup
+            startGroup 'Install Alectryon'
+              python3 -m venv "$PWD"
+              source "$PWD/bin/activate"
+              python3 -m pip install --upgrade alectryon
             endGroup
             startGroup 'Create output/'
               mkdir -v output
