@@ -462,7 +462,7 @@ Lemma app_assoc :
   forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.
 Proof.
 (* preuve laissée en exercice *)
-Qed.
+Admitted. (* remplacer / Qed. *)
 (*|
 
 **Indication:** `auto` essaie d’appliquer récursivement les hypothèses
@@ -478,7 +478,7 @@ Lemma rev_app_distr :
   forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
 (* preuve laissée en exercice *)
-Qed.
+Admitted. (* remplacer / Qed. *)
 (*|
 
 Le théorème visé
@@ -489,4 +489,4 @@ Le théorème visé
 Theorem rev_involutive : forall T (l : list T), rev (rev l) = l.
 Proof.
 (* preuve laissée en exercice *)
-(* Qed. *)
+Admitted. (* remplacer / Qed. *)
