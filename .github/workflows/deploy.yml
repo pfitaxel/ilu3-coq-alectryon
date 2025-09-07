@@ -28,7 +28,9 @@ jobs:
               sudo apt-get update -y -q
               sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
                 python3-pip
-              python3 -m pip install --user --upgrade alectryon
+              python3 -m venv "$PWD"
+              source "$PWD/bin/activate"
+              python3 -m pip install --upgrade alectryon
             endGroup
             startGroup 'Workaround permissions issue'
               sudo chown -R coq:coq .
