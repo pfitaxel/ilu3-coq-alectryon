@@ -4,7 +4,7 @@ ILU3 - Partie Coq - Modules et Types Abstraits
 ==============================================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
-:Date:    L3 Info, Année 2023-2024
+:Date:    L3 Info, Année 2025-2026
 
 Supports de ce cours :
 
