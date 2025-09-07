@@ -32,44 +32,24 @@
 </ul>
 <section id="elements-de-correction-du-dernier-ctd">
 <h2>Elements de correction du dernier CTD<a class="self-link" title="link to this section" href="#elements-de-correction-du-dernier-ctd"></a></h2>
-<dl class="simple">
-<dt>Lemma app_assoc :</dt>
-<dd><p>forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.</p>
-</dd>
-</dl>
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 18)</p>
-<p>Definition list ends without a blank line; unexpected unindent.</p>
-</aside>
-<p>Proof.
-induction l1; simpl; intros; auto.
-rewrite IHl1.
-reflexivity.
-Qed.</p>
-<dl class="simple">
-<dt>Lemma rev_app_distr :</dt>
-<dd><p>forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.</p>
-</dd>
-</dl>
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 26)</p>
-<p>Definition list ends without a blank line; unexpected unindent.</p>
-</aside>
-<p>Proof.
-induction l1; simpl; intros.
-apply app_nil.
-rewrite IHl1.
-rewrite app_assoc.
-reflexivity.
-Qed.</p>
+<pre class="code Coq literal-block"><code><span class="kn">Lemma</span> <span class="nf">app_assoc</span> <span class="o">:</span>
+  <span class="kr">forall</span> <span class="nv">T</span> <span class="o">(</span><span class="nv">l1</span> <span class="nv">l2</span> <span class="nv">l3</span> <span class="o">:</span> <span class="n">list</span> <span class="n">T</span><span class="o">),</span> <span class="n">l1</span> <span class="o">++</span> <span class="o">(</span><span class="n">l2</span> <span class="o">++</span> <span class="n">l3</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="n">l1</span> <span class="o">++</span> <span class="n">l2</span><span class="o">)</span> <span class="o">++</span> <span class="n">l3</span><span class="o">.</span>
+<span class="kn">Proof</span><span class="o">.</span>
+<span class="nb">induction</span> <span class="n">l1</span><span class="o">;</span> <span class="nb">simpl</span><span class="o">;</span> <span class="nb">intros</span><span class="o">;</span> <span class="nb">auto</span><span class="o">.</span>
+<span class="nb">rewrite</span> <span class="n">IHl1</span><span class="o">.</span>
+<span class="bp">reflexivity</span><span class="o">.</span>
+<span class="kn">Qed</span><span class="o">.</span></code></pre>
+<pre class="code Coq literal-block"><code><span class="kn">Lemma</span> <span class="nf">rev_app_distr</span> <span class="o">:</span>
+  <span class="kr">forall</span> <span class="nv">T</span> <span class="o">(</span><span class="nv">l1</span> <span class="nv">l2</span> <span class="o">:</span> <span class="n">list</span> <span class="n">T</span><span class="o">),</span> <span class="n">rev</span> <span class="o">(</span><span class="n">l1</span> <span class="o">++</span> <span class="n">l2</span><span class="o">)</span> <span class="o">=</span> <span class="n">rev</span> <span class="n">l2</span> <span class="o">++</span> <span class="n">rev</span> <span class="n">l1</span><span class="o">.</span>
+<span class="kn">Proof</span><span class="o">.</span>
+<span class="nb">induction</span> <span class="n">l1</span><span class="o">;</span> <span class="nb">simpl</span><span class="o">;</span> <span class="nb">intros</span><span class="o">.</span>
+<span class="nb">apply</span> <span class="n">app_nil</span><span class="o">.</span>
+<span class="nb">rewrite</span> <span class="n">IHl1</span><span class="o">.</span>
+<span class="nb">rewrite</span> <span class="n">app_assoc</span><span class="o">.</span>
+<span class="bp">reflexivity</span><span class="o">.</span>
+<span class="kn">Qed</span><span class="o">.</span></code></pre>
 <section id="exercices-bonus">
 <h3>Exercices bonus<a class="self-link" title="link to this section" href="#exercices-bonus"></a></h3>
-<aside class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 35)</p>
-<p>Title underline too short.</p>
-<pre class="literal-block">Exercices bonus
---------------</pre>
-</aside>
 <ul class="simple">
 <li><p>Définir la version récursive terminale de <code class="highlight coq"><span class="n">rev</span></code>, et prouver en Coq
 que les deux versions sont équivalentes.</p></li>
