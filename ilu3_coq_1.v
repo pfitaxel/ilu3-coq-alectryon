@@ -107,6 +107,10 @@ Environnement recommandé
 
 -  Dictionnaire OCaml/Coq (cf. Moodle ; autorisé à l'examen a priori)
 
+- Pour les prochaines séances, nous vous recommandons de venir en TD
+  avec votre ordinateur personnel ou tablette, pour chercher activement
+  les exercices (en utilisant jsCoq par exemple).
+
 Tutoriel d’installation
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1118,4 +1122,7 @@ Et la quantification existentielle ?
 - Retour sur la correspondance de Curry-Howard
 - | Présentation des "tactiques Coq"
   | pour construire une preuve interactivement/semi-automatiquement !
+- Pour les prochaines séances, nous vous recommandons de venir en TD
+  avec votre ordinateur personnel ou tablette, pour chercher activement
+  les exercices en utilisant JsCoq.
 |*)

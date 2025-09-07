@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" class="alectryon-standalone" xml:lang="en" lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
+<meta name="generator" content="Docutils 0.22: https://docutils.sourceforge.io/" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="dcterms.date" content="L3 Info, Année 2023-2024" />
 <title>ILU3 - Partie Coq - Modules et Types Abstraits</title>
@@ -30,6 +30,54 @@
 <ul class="simple">
 <li><p><a class="reference external" href="https://pfitaxel.github.io/ilu3-coq-alectryon/">https://pfitaxel.github.io/ilu3-coq-alectryon/</a></p></li>
 </ul>
+<section id="elements-de-correction-du-dernier-ctd">
+<h2>Elements de correction du dernier CTD<a class="self-link" title="link to this section" href="#elements-de-correction-du-dernier-ctd"></a></h2>
+<dl class="simple">
+<dt>Lemma app_assoc :</dt>
+<dd><p>forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.</p>
+</dd>
+</dl>
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 18)</p>
+<p>Definition list ends without a blank line; unexpected unindent.</p>
+</aside>
+<p>Proof.
+induction l1; simpl; intros; auto.
+rewrite IHl1.
+reflexivity.
+Qed.</p>
+<dl class="simple">
+<dt>Lemma rev_app_distr :</dt>
+<dd><p>forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.</p>
+</dd>
+</dl>
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 26)</p>
+<p>Definition list ends without a blank line; unexpected unindent.</p>
+</aside>
+<p>Proof.
+induction l1; simpl; intros.
+apply app_nil.
+rewrite IHl1.
+rewrite app_assoc.
+reflexivity.
+Qed.</p>
+<section id="exercices-bonus">
+<h3>Exercices bonus<a class="self-link" title="link to this section" href="#exercices-bonus"></a></h3>
+<aside class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<span class="docutils literal">src/ilu3_coq_3.v</span>, line 35)</p>
+<p>Title underline too short.</p>
+<pre class="literal-block">Exercices bonus
+--------------</pre>
+</aside>
+<ul class="simple">
+<li><p>Définir la version récursive terminale de <code class="highlight coq"><span class="n">rev</span></code>, et prouver en Coq
+que les deux versions sont équivalentes.</p></li>
+<li><p>Définir les versions directe et récursive terminale de <code class="highlight coq"><span class="n">fact</span></code> et prouver en Coq leur équivalence.</p></li>
+<li><p>Définir les versions directe et récursive terminale de <code class="highlight coq"><span class="n">pow</span> <span class="n">n</span> <span class="n">f</span></code> calculant n compositions de f et prouver en Coq leur équivalence.</p></li>
+</ul>
+</section>
+</section>
 <section id="modules-en-coq-et-application-aux-tad">
 <h2>Modules en Coq et application aux TAD<a class="self-link" title="link to this section" href="#modules-en-coq-et-application-aux-tad"></a></h2>
 <section id="specification-de-modules-types-de-modules">
@@ -57,16 +105,15 @@
 <p>Définition des identificateurs déclarés dans la spécification</p>
 <p>Implantations possibles du monoide :</p>
 <ul class="simple">
+<li><p>listes avec concaténation</p></li>
 <li><p>entiers avec <span class="math">\(0\)</span> et <span class="math">\(+\)</span></p></li>
 <li><p>entiers avec <span class="math">\(1\)</span> et <span class="math">\(*\)</span></p></li>
-<li><p>listes avec concaténation</p></li>
 <li><p>type singleton</p></li>
 <li><p>…</p></li>
 </ul>
 </section>
-<section id="modules-realisant-une-specification-1">
-<h3>2. Modules réalisant une spécification<a class="self-link" title="link to this section" href="#modules-realisant-une-specification-1"></a></h3>
-<p>Exemple : monoide des listes avec concaténation</p>
+<section id="exemple-monoide-des-listes-avec-concatenation">
+<h3>Exemple : monoide des listes avec concaténation<a class="self-link" title="link to this section" href="#exemple-monoide-des-listes-avec-concatenation"></a></h3>
 <pre class="alectryon-io highlight"><!-- Generator: Alectryon --><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Require Import</span> List.</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Import</span> ListNotations.</span><span class="alectryon-wsp">
 </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Set Implicit Arguments</span>.</span><span class="alectryon-wsp">
 </span></span><span class="alectryon-wsp">
@@ -86,7 +133,11 @@ prod x (prod y z) = prod (prod x y) z</div></blockquote></div></div></small><spa
 </span></span><span class="alectryon-wsp">
 </span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-3-v-chk4" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-3-v-chk4"><span class="kn">Lemma</span> <span class="nf">neutre_d</span> : <span class="kr">forall</span> <span class="nv">x</span>, prod x un = x.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">x</span> : T, prod x un = x</div></blockquote></div></div></small><span class="alectryon-wsp">
 </span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-3-v-chk5" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-3-v-chk5"><span class="kn">Proof</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><span class="goal-separator"><hr></span><div class="goal-conclusion"><span class="kr">forall</span> <span class="nv">x</span> : T, prod x un = x</div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-3-v-chk6" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-3-v-chk6"><span class="nb">induction</span> x; <span class="nb">auto</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><div class="goal-hyps"><span><var>a</var><span class="hyp-type"><b>: </b><span>nat</span></span></span><br><span><var>x</var><span class="hyp-type"><b>: </b><span>list nat</span></span></span><br><span><var>IHx</var><span class="hyp-type"><b>: </b><span>prod x un = x</span></span></span><br></div><span class="goal-separator"><hr></span><div class="goal-conclusion">prod (a :: x) un = a :: x</div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-3-v-chk7" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-3-v-chk7"><span class="nb">simpl</span>.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><div class="goal-hyps"><span><var>a</var><span class="hyp-type"><b>: </b><span>nat</span></span></span><br><span><var>x</var><span class="hyp-type"><b>: </b><span>list nat</span></span></span><br><span><var>IHx</var><span class="hyp-type"><b>: </b><span>prod x un = x</span></span></span><br></div><span class="goal-separator"><hr></span><div class="goal-conclusion">a :: prod x un = a :: x</div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><input class="alectryon-toggle" id="ilu3-coq-3-v-chk8" style="display: none" type="checkbox"><label class="alectryon-input" for="ilu3-coq-3-v-chk8"><span class="nb">rewrite</span> IHx.</label><small class="alectryon-output"><div><div class="alectryon-goals"><blockquote class="alectryon-goal"><div class="goal-hyps"><span><var>a</var><span class="hyp-type"><b>: </b><span>nat</span></span></span><br><span><var>x</var><span class="hyp-type"><b>: </b><span>list nat</span></span></span><br><span><var>IHx</var><span class="hyp-type"><b>: </b><span>prod x un = x</span></span></span><br></div><span class="goal-separator"><hr></span><div class="goal-conclusion">a :: x = a :: x</div></blockquote></div></div></small><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="bp">reflexivity</span>.</span><span class="alectryon-wsp"> </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Qed</span>.</span><span class="alectryon-wsp">
-</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">MonoList</span>.</span></span></pre></section>
+</span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">MonoList</span>.</span></span></pre><p><strong>Exercice :</strong> définir un module <code class="highlight coq"><span class="n">MonoAdd</span></code> implémentant
+la signature de Monoide pour les entiers munis de l'addition,
+et un module <code class="highlight coq"><span class="n">MonoMul</span></code> implémentant cette même signature pour les entiers
+munis de la multiplication.</p>
+</section>
 <section id="utilisation-independante-de-limplantation-foncteur">
 <h3>3. Utilisation indépendante de l’implantation (foncteur)<a class="self-link" title="link to this section" href="#utilisation-independante-de-limplantation-foncteur"></a></h3>
 <p>Exemple : unicité de l’élément neutre</p>
@@ -218,6 +269,18 @@ pop (push e (a :: n :: p)) = a :: n :: p</div></blockquote></div></div></small><
 </span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="nb">intros</span> e; <span class="nb">rewrite</span> &lt;-(IHp e) <span class="nb">at</span> <span class="mi">2</span>; <span class="nb">auto</span>.</span><span class="alectryon-wsp">
 </span></span><span class="alectryon-wsp">  </span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">Qed</span>.</span><span class="alectryon-wsp">
 </span></span><span class="alectryon-sentence"><span class="alectryon-input"><span class="kn">End</span> <span class="nf">Pile_QListe</span>.</span></span></pre></section>
+<section id="pour-aller-plus-loin">
+<h3>Pour aller plus loin<a class="self-link" title="link to this section" href="#pour-aller-plus-loin"></a></h3>
+<p>Pour rappel, il est important d'avoir terminé chaque TP avant d'aborder le suivant.</p>
+<p>Si vous voulez réviser ou approfondir les notions vues en CTD et TP Coq,
+ou faire d'autres exercices pour vous entraîner,
+voici 3 ressources supplémentaires, classées par ordre croissant de longueur :</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://rocq-prover.org/docs/tour-of-rocq">https://rocq-prover.org/docs/tour-of-rocq</a></p></li>
+<li><p><a class="reference external" href="https://learnxinyminutes.com/coq/">https://learnxinyminutes.com/coq/</a></p></li>
+<li><p><a class="reference external" href="https://cel.hal.science/inria-00001173">https://cel.hal.science/inria-00001173</a> (Coq in a Hurry, avec des exercices)</p></li>
+</ul>
+</section>
 </section>
 </div>
 </main>

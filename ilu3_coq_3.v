@@ -10,6 +10,38 @@ Supports de ce cours :
 
 -  https://pfitaxel.github.io/ilu3-coq-alectryon/
 
+Elements de correction du dernier CTD
+=====================================
+
+Lemma app_assoc :
+  forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.
+Proof.
+induction l1; simpl; intros; auto.
+rewrite IHl1.
+reflexivity.
+Qed.
+
+Lemma rev_app_distr :
+   forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.
+Proof.
+induction l1; simpl; intros.
+apply app_nil.
+rewrite IHl1.
+rewrite app_assoc.
+reflexivity.
+Qed.
+
+Exercices bonus
+--------------
+
+- Définir la version récursive terminale de `rev`, et prouver en Coq
+  que les deux versions sont équivalentes.
+
+- Définir les versions directe et récursive terminale de `fact` et prouver en Coq leur équivalence.
+
+- Définir les versions directe et récursive terminale de `pow n f` calculant n compositions de f et prouver en Coq leur équivalence.
+
+
 Modules en Coq et application aux TAD
 =====================================
 
@@ -49,20 +81,18 @@ Définition des identificateurs déclarés dans la spécification
 
 Implantations possibles du monoide :
 
+-  listes avec concaténation
+
 -  entiers avec :math:`0` et :math:`+`
 
 -  entiers avec :math:`1` et :math:`*`
-
--  listes avec concaténation
 
 -  type singleton
 
 -  …
 
-2. Modules réalisant une spécification
---------------------------------------
-
 Exemple : monoide des listes avec concaténation
+-----------------------------------------------
 
 .. coq::
 |*)
@@ -85,6 +115,11 @@ Module MonoList <: Monoide. (* vérification sans masquage *)
   Proof. induction x; auto. simpl. rewrite IHx. reflexivity. Qed.
 End MonoList.
 (*|
+
+**Exercice :** définir un module `MonoAdd` implémentant
+la signature de Monoide pour les entiers munis de l'addition,
+et un module `MonoMul` implémentant cette même signature pour les entiers
+munis de la multiplication.
 
 3. Utilisation indépendante de l’implantation (foncteur)
 --------------------------------------------------------
@@ -237,3 +272,18 @@ Module Pile_QListe <: Pile.
   intros e; rewrite <-(IHp e) at 2; auto.
   Qed.
 End Pile_QListe.
+(*|
+
+Pour aller plus loin
+--------------------
+
+Pour rappel, il est important d'avoir terminé chaque TP avant d'aborder le suivant.
+
+Si vous voulez réviser ou approfondir les notions vues en CTD et TP Coq,
+ou faire d'autres exercices pour vous entraîner,
+voici 3 ressources supplémentaires, classées par ordre croissant de longueur :
+
+- `<https://rocq-prover.org/docs/tour-of-rocq>`_
+- `<https://learnxinyminutes.com/coq/>`_
+- `<https://cel.hal.science/inria-00001173>`_ (Coq in a Hurry, avec des exercices)
+|*)

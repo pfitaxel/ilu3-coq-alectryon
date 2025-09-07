@@ -374,6 +374,10 @@ où `++` est une notation Coq qui équivaut à ``@`` en OCaml.
 
 **Méthode** On part du théorème à prouver et on identifie au fur et à
 mesure les lemmes intermédiaires qui méritent d’être prouvés à part.
+
+Ainsi, la structuration en sous-lemmes fait normalement partie de la
+recherche de preuve, mais en TP ILU3/Coq ou pour l'évaluation, on vous
+donnera d'emblée ce découpage pour plus de facilité.
 |*)
 
 (*|
@@ -427,12 +431,11 @@ Premier lemme – preuve par induction (version Coq)
 Lemma app_nil : forall (T : Type) (l : list T), l = l ++ [].
 Proof.
 induction l.
-{ (* accolades conseillées pour délimiter les preuves du sous but *)
-  simpl.
-  reflexivity. }
-simpl.
-rewrite <- IHl. (* utilise l’hypothèse d’induction *)
-reflexivity.
+- simpl.
+  reflexivity.
+- simpl.
+  rewrite <- IHl. (* utilise l’hypothèse d’induction *)
+  reflexivity.
 Qed.
 (*|
 
@@ -444,9 +447,9 @@ la tactique une fois après ";"
 Lemma app_nil' : forall (T : Type) (l : list T), l = l ++ [].
 Proof.
 induction l; simpl.
-{ reflexivity. }
-rewrite <- IHl. (* utilise l’hypothèse d’induction *)
-reflexivity.
+- reflexivity.
+- rewrite <- IHl. (* utilise l’hypothèse d’induction *)
+  reflexivity.
 Qed.
 (*|
 
@@ -458,13 +461,11 @@ Deuxième lemme
 Lemma app_assoc :
   forall T (l1 l2 l3 : list T), l1 ++ (l2 ++ l3) = (l1 ++ l2) ++ l3.
 Proof.
-induction l1; simpl; intros; auto.
-rewrite IHl1.
-reflexivity.
-Qed.
+(* preuve laissée en exercice *)
+Admitted. (* remplacer / Qed. *)
 (*|
 
-`auto` essaie d’appliquer récursivement les hypothèses
+**Indication:** `auto` essaie d’appliquer récursivement les hypothèses
 (et certains lemmes standard, comme la réflexivité)
 pour prouver le sous-but ; sinon la tactique ne fait rien.
 
@@ -476,12 +477,8 @@ Troisième lemme
 Lemma rev_app_distr :
   forall T (l1 l2 : list T), rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-induction l1; simpl; intros.
-apply app_nil.
-rewrite IHl1.
-rewrite app_assoc.
-reflexivity.
-Qed.
+(* preuve laissée en exercice *)
+Admitted. (* remplacer / Qed. *)
 (*|
 
 Le théorème visé
@@ -491,5 +488,5 @@ Le théorème visé
 |*)
 Theorem rev_involutive : forall T (l : list T), rev (rev l) = l.
 Proof.
-(* exercice ! *)
-(* Qed. *)
+(* preuve laissée en exercice *)
+Admitted. (* remplacer / Qed. *)
