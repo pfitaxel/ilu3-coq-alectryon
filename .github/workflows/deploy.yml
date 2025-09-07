@@ -24,6 +24,11 @@ jobs:
             startGroup 'Print opam config'
               opam config list; opam repo list; opam list
             endGroup
+            startGroup 'Install python3-venv'
+              sudo apt-get update -y -q
+              sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
+                python3-venv
+            endGroup
             startGroup 'Workaround permissions issue'
               sudo chown -R coq:coq .
               # the container user has UID=GID=1000,
