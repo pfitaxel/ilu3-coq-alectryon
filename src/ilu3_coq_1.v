@@ -18,7 +18,7 @@ Présentation du logiciel Coq
 
 -  Implémenté en OCaml
 
-.. image:: https://coq.inria.fr/files/barron_logo.png
+.. image:: https://raw.githubusercontent.com/rocq-prover/coq.github.io/refs/heads/master/files/barron_logo.png
    :alt: Coq
    :target: https://coq.inria.fr
 
@@ -35,6 +35,12 @@ Présentation du logiciel Coq
 .. image:: https://img.shields.io/docker/v/rocq/rocq-prover/latest
    :alt: rocq latest version
    :target: https://github.com/rocq/rocq-prover/releases
+
+.. image:: https://raw.githubusercontent.com/rocq-prover/rocq-prover.org/refs/heads/main/rocq-id/logos/PNG/logo-rocq-blue_orange.png
+   :alt: Rocq
+   :width: 450px
+   :target: https://rocq-prover.org
+
 |*)
 
 (*|
