@@ -4,7 +4,7 @@ ILU3 - Partie Coq
 =================
 
 :Auteurs: Jean-Paul Bodeveix (resp. UE), Erik Martin-Dorel, Pierre Roux
-:Date:    L3 Info, Année 2025-2026
+:Date:    L3 Info, Année 2026-2027
 
 Supports de ce cours :
 
@@ -23,11 +23,18 @@ Présentation du logiciel Coq
    :target: https://coq.inria.fr
 
 -  Initié par Thierry Coquand et Gérard Huet, et développé par Inria
-   depuis 1984, la dernière version stable étant :
+   depuis 1984, la dernière version de Coq est :
 
 .. image:: https://img.shields.io/docker/v/coqorg/coq/latest
    :alt: coq latest version
    :target: https://github.com/coq/coq/releases
+
+-  Coq a été renommé en Rocq en janvier 2025,
+   la dernière version stable de Rocq étant :
+
+.. image:: https://img.shields.io/docker/v/rocq/rocq-prover/latest
+   :alt: rocq latest version
+   :target: https://github.com/rocq/rocq-prover/releases
 |*)
 
 (*|
@@ -187,7 +194,7 @@ Motivations pour utiliser Coq
 Positionnement de Coq par rapport aux types abstraits
 -----------------------------------------------------
 
-Par rapport à PFITA
+Par rapport à OCaml
 ~~~~~~~~~~~~~~~~~~~
 
 -  **explicitation des axiomes** dans la spécification des types abstraits
