@@ -38,6 +38,7 @@ Présentation du logiciel Coq
 
 .. image:: https://raw.githubusercontent.com/rocq-prover/rocq-prover.org/refs/heads/main/rocq-id/logos/PNG/logo-rocq-blue_orange.png
    :alt: Rocq
+   :width: 450px
    :target: https://rocq-prover.org
 
 |*)
